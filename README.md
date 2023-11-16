@@ -1,2 +1,13 @@
-# COMP1510TermProject
-TODO: Remove .idea (gitignore)
+## COMP1510TermProject
+
+## Your name:
+
+Jason Chow
+
+## Your student number:
+
+A00942129
+
+## Your GitHub username:
+
+Beijzum
