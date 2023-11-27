@@ -217,7 +217,11 @@ def check_for_foes():
     """
     if random.random() <= 0.25:
         print("Watch out! Something has seen you!")
-        return True
+
+        # Generate a foe
+        foe = generate_foe()
+        print(f"You are facing a {foe['Name']}!")
+        return True, foe
 
     else:
         print("You managed to avoid enemies.")
@@ -233,8 +237,9 @@ def generate_foe():
     :postcondition: creates a foe dictionary with random attributes
     :return: a dictionary representing the foe with attributes like 'Attack Power' and 'HP'
 
-    >>> generate_foe()
-    {'Name': 'Goblin', 'Attack Power': 2, 'HP': 10}
+    # >>> generate_foe()
+    # {'Name': 'Goblin', 'Attack Power': 2, 'HP': 5}
+    Dunno how to test yet. @patch?
     """
     foe_names = ["Goblin", "Orc", "Skeleton", "Dragon"]
     return {
@@ -275,6 +280,56 @@ def check_if_goal_attained(board, character):
 
     else:
         return False
+
+
+def combat_loop(character, foe, board):
+    """
+    Conduct the combat loop between the character and a foe.
+
+    :param character: a non-empty dictionary representing the player character
+    :param foe: a non-empty dictionary representing the foe
+    :param board: a non-empty dictionary representing the game board
+    :precondition: character must be alive with greater than 0 HP
+    :precondition: foe must be alive with greater than 0 HP
+    :postcondition: conducts the combat loop until either the character or the foe is defeated
+    :return: returns True if the character wins, otherwise False
+
+    # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack Power': 1, 'Armor': 0},
+    # ... {'Name': 'Goblin', 'Attack Power': 2, 'HP': 10},
+    # ... {(0, 0): "Starting Room", (1, 0): "Empty Room"})
+    # True
+    Dunno how to test yet. @patch?
+    """
+    while is_alive(character) and is_alive(foe):
+        print(f"Your HP: {character['Current HP']}")
+        print(f"{foe['Name']}'s HP: {foe['HP']}")
+        action = input("Do you want to attack(1) or run(2)? ")
+
+        if action == "1":
+            # Player attacks the foe
+            damage_dealt = max(0, character['Attack Power'] - foe['Armor'])
+            foe['HP'] -= damage_dealt
+            print(f"You dealt {damage_dealt} damage to the {foe['Name']}!")
+
+            # Foe counterattacks
+            if is_alive(foe):
+                damage_taken = max(0, foe['Attack Power'] - character['Armor'])
+                character['Current HP'] -= damage_taken
+                print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
+
+        elif action == "2":
+            print("You run away from the battle.")
+            return False
+
+        else:
+            print("Invalid choice. Please enter '1' to attack or '2' to run.")
+
+    if is_alive(foe):
+        print(f"You were defeated by the {foe['Name']}. Game over!")
+        return False
+    else:
+        print(f"You defeated the {foe['Name']}!")
+        return True
 
 
 def guessing_game(character):
