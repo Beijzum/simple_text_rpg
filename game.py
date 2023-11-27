@@ -46,9 +46,9 @@ def make_character():
     :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack Power, and 0 Armor
 
     >>> make_character()
-    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack Power': 1, 'Armor': 0, 'Inventory': []}
+    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Armor': 0, 'Inventory': []}
     """
-    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5, "Attack Power": 1, "Armor": 0, "Inventory": []}
+    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 10, "Attack Power": 1, "Armor": 0, "Inventory": []}
 
 
 def describe_current_location(board, character):
@@ -217,11 +217,7 @@ def check_for_foes():
     """
     if random.random() <= 0.25:
         print("Watch out! Something has seen you!")
-
-        # Generate a foe
-        foe = generate_foe()
-        print(f"You are facing a {foe['Name']}!")
-        return True, foe
+        return True
 
     else:
         print("You managed to avoid enemies.")
@@ -282,13 +278,12 @@ def check_if_goal_attained(board, character):
         return False
 
 
-def combat_loop(character, foe, board):
+def combat_loop(character, foe):
     """
     Conduct the combat loop between the character and a foe.
 
     :param character: a non-empty dictionary representing the player character
     :param foe: a non-empty dictionary representing the foe
-    :param board: a non-empty dictionary representing the game board
     :precondition: character must be alive with greater than 0 HP
     :precondition: foe must be alive with greater than 0 HP
     :postcondition: conducts the combat loop until either the character or the foe is defeated
@@ -314,7 +309,7 @@ def combat_loop(character, foe, board):
             # Foe counterattacks
             if is_alive(foe):
                 damage_taken = max(0, foe['Attack Power'] - character['Armor'])
-                character['Current HP'] -= damage_taken
+                character["Current HP"] -= damage_taken
                 print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
         elif action == "2":
@@ -407,7 +402,7 @@ def is_alive(character):
     >>> is_alive(character_test)
     False
     """
-    return True if character["Current HP"] != 0 else False
+    return True if character['Current HP'] != 0 else False
 
 
 def game():  # called from main
@@ -432,7 +427,17 @@ def game():  # called from main
             # describe_current_location(board, character) #unneccesary?
             there_is_a_challenger = check_for_foes()
             if there_is_a_challenger:
-                guessing_game(character)
+                # Generate a foe
+                foe = generate_foe()
+                print(f"You are facing a {foe['Name']}!")
+                # guessing_game(character)
+
+                # Combat loop
+                combat_result = combat_loop(character, foe)
+
+                if not combat_result:
+                    break  # Player ran away from combat
+
             achieved_goal = check_if_goal_attained(board, character)
 
         else:
