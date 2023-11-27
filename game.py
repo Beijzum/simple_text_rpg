@@ -42,13 +42,13 @@ def make_character():
 
     :param: N/A
     :precondition: a dictionary with x, y coordinates, and HP counter
-    :postcondition: creates a character with the given starting location and HP
-    :return: a dictionary with coordinates at 0, 0 and 5 HP
+    :postcondition: creates a character with the given starting location, HP, attack power, and armor
+    :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack Power, and 0 Armor
 
     >>> make_character()
-    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5}
+    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack Power': 1, 'Armor': 0, 'Inventory': []}
     """
-    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5}
+    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5, "Attack Power": 1, "Armor": 0, "Inventory": []}
 
 
 def describe_current_location(board, character):
@@ -222,6 +222,26 @@ def check_for_foes():
     else:
         print("You managed to avoid enemies.")
         return False
+
+
+def generate_foe():
+    """
+    Generate a foe with random attributes.
+
+    :param: N/A
+    :precondition: N/A
+    :postcondition: creates a foe dictionary with random attributes
+    :return: a dictionary representing the foe with attributes like 'Attack Power' and 'HP'
+
+    >>> generate_foe()
+    {'Name': 'Goblin', 'Attack Power': 2, 'HP': 10}
+    """
+    foe_names = ["Goblin", "Orc", "Skeleton", "Dragon"]
+    return {
+        "Name": random.choice(foe_names),
+        "Attack Power": random.randint(1, 2),
+        "HP": random.randint(3, 5)
+    }
 
 
 def check_if_goal_attained(board, character):
