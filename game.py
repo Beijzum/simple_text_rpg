@@ -46,9 +46,9 @@ def make_character():
     :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack Power, and 0 Armor
 
     >>> make_character()
-    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Armor': 0, 'Inventory': []}
+    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Defence': 0, 'Inventory': []}
     """
-    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 10, "Attack Power": 1, "Armor": 0, "Inventory": []}
+    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 10, "Attack Power": 1, "Defence": 0, "Inventory": []}
 
 
 def describe_current_location(board, character):
@@ -234,14 +234,15 @@ def generate_foe():
     :return: a dictionary representing the foe with attributes like 'Attack Power' and 'HP'
 
     # >>> generate_foe()
-    # {'Name': 'Goblin', 'Attack Power': 2, 'HP': 5}
+    # {'Name': 'Goblin', 'Attack Power': 2, 'Current HP': 5}
     Dunno how to test yet. @patch?
     """
     foe_names = ["Goblin", "Orc", "Skeleton", "Dragon"]
     return {
         "Name": random.choice(foe_names),
         "Attack Power": random.randint(1, 2),
-        "HP": random.randint(3, 5)
+        "Current HP": random.randint(3, 5),
+        "Defence": random.randint(0, 1)
     }
 
 
@@ -290,31 +291,31 @@ def combat_loop(character, foe):
     :return: returns True if the character wins, otherwise False
 
     # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack Power': 1, 'Armor': 0},
-    # ... {'Name': 'Goblin', 'Attack Power': 2, 'HP': 10},
+    # ... {'Name': 'Goblin', 'Attack Power': 2, 'Current HP': 10},
     # ... {(0, 0): "Starting Room", (1, 0): "Empty Room"})
     # True
     Dunno how to test yet. @patch?
     """
     while is_alive(character) and is_alive(foe):
         print(f"Your HP: {character['Current HP']}")
-        print(f"{foe['Name']}'s HP: {foe['HP']}")
+        print(f"{foe['Name']}'s HP: {foe['Current HP']}")
         action = input("Do you want to attack(1) or run(2)? ")
 
         if action == "1":
             # Player attacks the foe
-            damage_dealt = max(0, character['Attack Power'] - foe['Armor'])
-            foe['HP'] -= damage_dealt
+            damage_dealt = max(0, character['Attack Power'] - foe['Defence'])
+            foe['Current HP'] -= damage_dealt
             print(f"You dealt {damage_dealt} damage to the {foe['Name']}!")
 
             # Foe counterattacks
             if is_alive(foe):
-                damage_taken = max(0, foe['Attack Power'] - character['Armor'])
-                character["Current HP"] -= damage_taken
+                damage_taken = max(0, foe['Attack Power'] - character['Defence'])
+                character['Current HP'] -= damage_taken
                 print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
         elif action == "2":
             print("You run away from the battle.")
-            return False
+            return False, character
 
         else:
             print("Invalid choice. Please enter '1' to attack or '2' to run.")
