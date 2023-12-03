@@ -46,9 +46,39 @@ def make_character():
     :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack Power, and 0 Armor
 
     >>> make_character()
-    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Defence': 0, 'Inventory': []}
+    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Defence': 0, 'Inventory': [], \
+'Level': 1, 'Experience Points': 0, 'EXP to Level Up': 10}
     """
-    return {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 10, "Attack Power": 1, "Defence": 0, "Inventory": []}
+    return {
+        "X-coordinate": 0,
+        "Y-coordinate": 0,
+        "Max HP": 10,
+        "Current HP": 10,
+        "Attack Power": 1,
+        "Defence": 0,
+        "Inventory": [],
+        "Level": 1,
+        "Experience Points": 0,
+        "EXP to Level Up": 10
+    }
+
+
+def level_up(character):
+    """
+    """
+
+    # Adjust stats based on level
+    character["Max HP"] += 5
+    character["Current HP"] = character["Max HP"]
+    character["Attack Power"] += 1
+    character["Defence"] += 1
+    character["Level"] += 1
+    character['Experience Points'] -= character['EXP to Level Up']
+    character['EXP to Level Up'] = int(character['EXP to Level Up'] * 1.5)
+    print(character)
+    print(f"Congratulations! You leveled up to Level {character['Level']}!")
+
+    return character
 
 
 def describe_current_location(board, character):
@@ -241,8 +271,8 @@ def generate_foe():
     return {
         "Name": random.choice(foe_names),
         "Attack Power": random.randint(1, 2),
-        "Current HP": random.randint(3, 5),
-        "Defence": random.randint(0, 1)
+        "Current HP": random.randint(2, 4),
+        "Defence": 0,
     }
 
 
@@ -325,7 +355,11 @@ def combat_loop(character, foe):
         return False
     else:
         print(f"You defeated the {foe['Name']}!")
-        return True
+        experience_gained = 5 if foe['Attack Power'] > 1 else 2
+        character["Experience Points"] += experience_gained
+        print(f"You gained {experience_gained} experience points!")
+        print(f"You defeated the {foe['Name']}!")
+        return True, character
 
 
 def guessing_game(character):
@@ -410,10 +444,11 @@ def game():  # called from main
     """
     Initialize the game
     """
-    rows = 3
-    columns = 3
+    rows = 5
+    columns = 5
     board = make_board(rows, columns)
     character = make_character()
+
     achieved_goal = False
     print(f"Your current HP is {character['Current HP']}.")
 
@@ -425,7 +460,6 @@ def game():  # called from main
 
         if valid_move:
             move_character(character, direction)
-            # describe_current_location(board, character) #unneccesary?
             there_is_a_challenger = check_for_foes()
             if there_is_a_challenger:
                 # Generate a foe
@@ -438,6 +472,10 @@ def game():  # called from main
 
                 if not combat_result:
                     break  # Player ran away from combat
+
+                # Check for level up
+                if character['Experience Points'] >= character['EXP to Level Up']:
+                    level_up(character)
 
             achieved_goal = check_if_goal_attained(board, character)
 
