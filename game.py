@@ -45,9 +45,9 @@ def make_character():
     :postcondition: creates a character with the given starting location, HP, attack power, and armor
     :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack Power, and 0 Armor
 
-    >>> make_character()
-    {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Defence': 0, 'Inventory': [], \
-'Level': 1, 'Experience Points': 0, 'EXP to Level Up': 10}
+#     >>> make_character()
+#     {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Defence': 0, 'Inventory': [], \
+# 'Level': 1, 'Experience Points': 0, 'EXP to Level Up': 10}
     """
     return {
         "X-coordinate": 0,
@@ -63,11 +63,24 @@ def make_character():
     }
 
 
+def get_character_stats(character):
+    """
+    """
+    print(f"Your current Level is {character['Level']}.")
+    print(f"Your current Max HP is {character['Max HP']}.")
+    print(f"Your current HP is {character['Current HP']}.")
+    print(f"Your current Attack Power is {character['Attack Power']}.")
+    print(f"Your current Defence is {character['Defence']}.")
+    print(f"Your current Experience Points is {character['Experience Points']}.")
+    print(f"Your current EXP to Level Up is {character['EXP to Level Up']}.")
+    print(f"Your current Inventory is {character['Inventory']}.")
+    print(f"Your current coordinates are ({character['X-coordinate']},{character['X-coordinate']}).")
+
+
 def level_up(character):
     """
     """
 
-    # Adjust stats based on level
     character["Max HP"] += 5
     character["Current HP"] = character["Max HP"]
     character["Attack Power"] += 1
@@ -75,7 +88,6 @@ def level_up(character):
     character["Level"] += 1
     character['Experience Points'] -= character['EXP to Level Up']
     character['EXP to Level Up'] = int(character['EXP to Level Up'] * 1.5)
-    print(character)
     print(f"Congratulations! You leveled up to Level {character['Level']}!")
 
     return character
@@ -114,7 +126,7 @@ def describe_current_location(board, character):
         print("You see nothing but darkness in this room.")
 
 
-def get_user_choice():
+def get_user_choice(character):
     """
     Prompt user for input to choose a direction from a numbered list.
 
@@ -130,7 +142,7 @@ def get_user_choice():
         print("2. Down")
         print("3. Left")
         print("4. Right")
-        user_input = input("Please choose a direction (1, 2, 3, or 4): ")
+        user_input = input("Please choose a direction (1, 2, 3, or 4) or get stats(5): ")
 
         if user_input == "1":
             print("You chose to go up...")
@@ -147,6 +159,9 @@ def get_user_choice():
         elif user_input == "4":
             print("You chose to go right...")
             return "right"
+
+        elif user_input == "5":
+            get_character_stats(character)
 
         else:
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
@@ -355,7 +370,7 @@ def combat_loop(character, foe):
         return False
     else:
         print(f"You defeated the {foe['Name']}!")
-        experience_gained = 5 if foe['Attack Power'] > 1 else 2
+        experience_gained = 15 if foe['Attack Power'] > character['Level'] else 10
         character["Experience Points"] += experience_gained
         print(f"You gained {experience_gained} experience points!")
         print(f"You defeated the {foe['Name']}!")
@@ -455,7 +470,7 @@ def game():  # called from main
     while is_alive and not achieved_goal:
         # Tell the user where they are
         describe_current_location(board, character)
-        direction = get_user_choice()
+        direction = get_user_choice(character)
         valid_move = validate_move(board, character, direction)
 
         if valid_move:
