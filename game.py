@@ -84,7 +84,7 @@ def get_character_stats(character):
     print(f"Your current Experience Points is {character['Experience Points']}.")
     print(f"Your current EXP to Level Up is {character['EXP to Level Up']}.")
     print(f"Your current Gold is {character['Gold']}.")
-    print(f"Your current coordinates are ({character['X-coordinate']},{character['X-coordinate']}).")
+    print(f"Your current coordinates are ({character['X-coordinate']},{character['Y-coordinate']}).")
 
 
 def get_character_inventory(character):
@@ -598,9 +598,7 @@ def game():  # called from main
     columns = 5
     board = make_board(rows, columns)
     character = make_character()
-
     achieved_goal = False
-    print(f"Your current HP is {character['Current HP']}.")
 
     while not achieved_goal:
         # Tell the user where they are
