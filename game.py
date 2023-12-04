@@ -94,6 +94,30 @@ def get_character_inventory(character):
         print(f"Item #{key} {value}.")
 
 
+def show_map(board, character):
+    rows, columns = 5, 5
+
+    player_location = character["X-coordinate"], character["Y-coordinate"]
+
+    for row in range(rows):
+        print("----------------------------------------------")
+        for column in range(columns):
+            position = (row, column)
+            if position == player_location:
+                print("| @Player", end="")
+            elif position == (2, 2):
+                print("| $Shop ", end=" ")
+            elif position in [(4, 0), (0, 4)]:
+                print("|#Special", end="")
+            elif position == (4, 4):
+                print("| #Boss ", end=" ")
+            else:
+                print(f"| ({row}, {column})", end=" ")
+
+        print("|")
+    print("----------------------------------------------")
+
+
 def level_up(character):
     """
     """
@@ -145,7 +169,7 @@ def describe_current_location(board, character):
         print("You see nothing but darkness in this room.")
 
 
-def get_user_choice(character):
+def get_user_choice(board, character):
     """
     Prompt user for input to choose a direction from a numbered list.
 
@@ -161,7 +185,8 @@ def get_user_choice(character):
         print("2. Down")
         print("3. Left")
         print("4. Right")
-        user_input = input("Please choose a direction (1, 2, 3, or 4) or get character status(5), inventory(6): ")
+        user_input = input("Please choose a direction (1, 2, 3, or 4) or show map(5), character stats(6), "
+                           "inventory(7): ")
 
         if user_input == "1":
             print("You chose to go up...")
@@ -180,10 +205,13 @@ def get_user_choice(character):
             return "right"
 
         elif user_input == "5":
-            get_character_stats(character)
+            show_map(board, character)
 
         elif user_input == "6":
             get_character_inventory(character)
+
+        elif user_input == "7":
+            get_character_stats(character)
 
         else:
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
@@ -421,7 +449,7 @@ def visit_shop(character):
                 add_inventory(character, potion_name, 5, 1, "Consumable")
 
         elif choice == "4":
-            print("Thanks for visiting the Shop! Come again.")
+            print(f"\"Thanks for visiting the Shop! Come again.\"")
             break
 
         else:
@@ -643,7 +671,7 @@ def game():  # called from main
     while not achieved_goal:
         # Tell the user where they are
         describe_current_location(board, character)
-        direction = get_user_choice(character)
+        direction = get_user_choice(board, character)
         valid_move = validate_move(board, character, direction)
 
         if valid_move:
