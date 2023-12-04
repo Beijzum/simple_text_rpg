@@ -66,7 +66,7 @@ def make_character():
         "Attack": 1,
         "Defence": 0,
         "Abilities": {
-            1: {"Name": "Power Strike", "Power": 1},
+            1: {"Name": "Power Strike", "Power": 2},
         },
         "Inventory": {
             1: {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
@@ -439,7 +439,8 @@ def check_win_condition(board, character):
     y = character["Y-coordinate"]
     coordinate = (x, y)
 
-    if board.get(coordinate) == "Final Room" and "Chocolate Orb" in character['Inventory']:
+    if (board.get(coordinate) == "Final Room"
+            and any(item['Name'] == "Chocolate Orb" for item in character['Inventory'].values())):
         return True
     else:
         return False
@@ -533,6 +534,9 @@ def add_inventory(character, item_name, item_power, item_quantity, item_type):
         if value['Name'] == item_name and value['Type'] == "Consumable":
             print(f"You added {item_quantity} {item_name}(s) to your inventory!")
             value['Quantity'] += item_quantity
+            return
+        elif value['Name'] == item_name and value['Type'] == "Special":
+            print(f"You already have {item_name} in your inventory.")
             return
 
     # If the item is not in the inventory or is a non-consumable, add a new entry
@@ -659,6 +663,12 @@ def combat_loop(character, foe):
         print(f"You gained {foe['Experience Points']} experience points!")
         character['Gold'] += foe['Gold']
         print(f"Your total gold is now {character['Gold']}.")
+        # Check for special item in foe's inventory
+        special_item = foe.get('Special Item')
+        if special_item:
+            print(f"You obtained a special item: {special_item}!")
+            add_inventory(character, special_item, 0, 1, "Special")
+
         return True, character
 
 
@@ -718,15 +728,15 @@ def game():  # called from main
     board = make_board(rows, columns)
     character = make_character()
     achieved_goal = False
+    describe_current_location(board, character)
 
     while not achieved_goal:
-        # Tell the user where they are
-        describe_current_location(board, character)
         direction = get_user_choice(rows, columns, character)
         valid_move = validate_move(board, character, direction)
 
         if valid_move:
             move_character(character, direction)
+            describe_current_location(board, character)
             player_location = (character["X-coordinate"], character["Y-coordinate"])
 
             if board.get(player_location) in ["Winter Sanctum", "Inferno Lair"]:
@@ -742,22 +752,14 @@ def game():  # called from main
                     level_up(character)
 
             elif (board.get(player_location) == "Final Room"
-                  and "Flame Orb" in character['Inventory']
-                  and "Winter Orb" in character['Inventory']):
+                  and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())
+                  and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())):
                 special_foe = generate_special_foe(board, character)
                 print(f"You are facing {special_foe['Name']}!")
 
                 combat_result = combat_loop(character, special_foe)
 
                 if not combat_result:
-                    break
-
-                if character['Experience Points'] >= character['EXP to Level Up']:
-                    level_up(character)
-
-                if is_alive(character) and achieved_goal and "Chocolate Orb" in character['Inventory']:
-                    print(f"You have beat the Final Boss!")
-                    print("Congratulations, you win a life-time supply of your favourite chocolate!")
                     break
 
             elif board.get(player_location) == "Traveling Merchant":
@@ -787,6 +789,11 @@ def game():  # called from main
 
         if character["Current HP"] == 0:
             print("You lost all your HP! You lose!")
+            break
+
+        if is_alive(character) and achieved_goal:
+            print(f"You have beaten the Final Boss!")
+            print("Congratulations, you win a life-time supply of your favourite chocolate!")
             break
 
 
