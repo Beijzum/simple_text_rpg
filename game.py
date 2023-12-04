@@ -293,7 +293,7 @@ def generate_foe():
     }
 
 
-def check_if_goal_attained(board, character):
+def check_location(board, character):
     """
     Check if user has reached the goal.
 
@@ -307,12 +307,12 @@ def check_if_goal_attained(board, character):
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Chocolate Room"}
     >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5}
-    >>> check_if_goal_attained(board_test, character_test)
+    >>> check_location(board_test, character_test)
     False
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Chocolate Room"}
     >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Current HP": 5}
-    >>> check_if_goal_attained(board_test, character_test)
+    >>> check_location(board_test, character_test)
     True
     """
     x = character["X-coordinate"]
@@ -375,7 +375,6 @@ def combat_loop(character, foe):
         experience_gained = 15 if foe['Attack Power'] > character['Level'] else 10
         character["Experience Points"] += experience_gained
         print(f"You gained {experience_gained} experience points!")
-        print(f"You defeated the {foe['Name']}!")
         return True, character
 
 
@@ -454,7 +453,7 @@ def is_alive(character):
     >>> is_alive(character_test)
     False
     """
-    return True if character['Current HP'] >= 0 else False
+    return True if character['Current HP'] > 0 else False
 
 
 def game():  # called from main
@@ -494,7 +493,7 @@ def game():  # called from main
                 if character['Experience Points'] >= character['EXP to Level Up']:
                     level_up(character)
 
-            achieved_goal = check_if_goal_attained(board, character)
+            achieved_goal = check_location(board, character)
 
         else:
             print("You cannot go that direction.")
