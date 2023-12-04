@@ -416,6 +416,7 @@ def add_equipment(character, item_name, item_power, item_type):
         if value['Name'] == item_name:
             print(f"You already have {item_name} in your inventory.")
             return
+
         elif item_type == "Weapon" and value['Type'] == "Weapon":
             print(f"Replacing {value['Name']} with {item_name} in your inventory.")
             character['Attack'] -= value['Power']
@@ -464,12 +465,12 @@ def combat_loop(character, foe):
     """
     while is_alive(character) and is_alive(foe):
         print(f"Your HP: {character['Current HP']}")
-        print(f"{foe['Name']}'s HP: {foe['Current HP']}")
         print("Options:")
         print("1. Attack")
         print("2. Use Ability")
         print("3. Use Items")
-        print("4. Run Away")
+        print("4. Check Enemy Stats")
+        print("5. Run Away")
 
         action = input("Choose an option (1, 2, 3, or 4): ")
 
@@ -538,6 +539,12 @@ def combat_loop(character, foe):
                 print("Invalid input. Please enter a valid item number.")
 
         elif action == "4":
+            print(f"{foe['Name']}'s HP: {foe['Current HP']}")
+            print(f"{foe['Name']}'s Attack: {foe['Attack']}")
+            print(f"{foe['Name']}'s Defence: {foe['Defence']}")
+            continue
+
+        elif action == "5":
             # Player chooses to run away
             print("You run away from the battle.")
             return False, character
@@ -571,12 +578,12 @@ def use_item(character, item_key):
         if "Health Potion" in selected_item["Name"]:
             healing_amount = selected_item["Power"]
             # Check if the character is already at max HP
-            remaining_health = min(character['Max HP'] - character['Current HP'], healing_amount)
+            remaining_health = min(healing_amount, character['Max HP'] - character['Current HP'])
             # Will add the lowest amount to character health. If character is already at max HP, nothing will be added.
             character['Current HP'] += remaining_health
             selected_item['Quantity'] -= 1
 
-            print(f"You used a {selected_item['Name']} and healed {healing_amount} health!")
+            print(f"You used a {selected_item['Name']} and healed {remaining_health} health!")
             return True
 
         print(f"You can't use {selected_item['Name']} in combat.")
