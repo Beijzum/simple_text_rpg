@@ -153,21 +153,33 @@ def level_up(character):
     print(f"Your Attack is now {character['Attack']}.")
     print(f"Your Defence is now {character['Defence']}.")
 
-    learn_skill(character)
+    learn_ability(character)
 
     return character
 
 
-def learn_skill(character):
+def learn_ability(character):
     if character['Level'] == 3:
-        ability_count = len(character['Inventory']) + 1
+        ability_count = len(character['Ability']) + 1
         new_ability = {"Name": "Multi-Strike", "Power": 4, "AP Cost": 2}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     if character['Level'] == 5:
-        ability_count = len(character['Inventory']) + 1
-        new_ability = {"Name": "Holy Strike", "Power": 5, "AP Cost": 3}
+        ability_count = len(character['Ability']) + 1
+        new_ability = {"Name": "Holy Strike", "Power": 7, "AP Cost": 3}
+        character['Abilities'][ability_count] = new_ability
+        print(f"You learned a new ability: {new_ability['Name']}!")
+
+    if character['Level'] == 7:
+        ability_count = len(character['Ability']) + 1
+        new_ability = {"Name": "Ultimate Strike", "Power": 10, "AP Cost": 5}
+        character['Abilities'][ability_count] = new_ability
+        print(f"You learned a new ability: {new_ability['Name']}!")
+
+    if character['Level'] == 10:
+        ability_count = len(character['Ability']) + 1
+        new_ability = {"Name": "You're Playing Too Long", "Power": 999, "AP Cost": 10}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
@@ -650,6 +662,7 @@ def combat_loop(character, foe):
     """
     while is_alive(character) and is_alive(foe):
         print(f"Your HP: {character['Current HP']}")
+        print(f"Your AP: {character['Ability Points']}")
         print("Options:")
         print("1. Attack")
         print("2. Use Ability")
