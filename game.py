@@ -550,25 +550,43 @@ def visit_shop(character):
                 add_equipment(character, weapon_name, 2, "Weapon")
 
         elif choice == "2":
-            armour_cost = 10
-            armour_name = "Leather armour"
+            print(f"1. Leather Armour $10\n2. Iron Armour $30")
+            armour_choice = input("Enter the number of the armour you want to buy: ")
+
+            if armour_choice == "1":
+                armour_cost = 10
+                armour_name = "Leather Armour"
+
+            elif armour_choice == "2":
+                armour_cost = 30
+                armour_name = "Iron Armour"
+
+            else:
+                print("Invalid choice. Please enter a valid option.")
+                return
 
             if character['Gold'] < armour_cost:
                 print("Not enough gold to buy the armour.")
+
             elif "Guardian Armour" in [item['Name'] for item in character['Inventory'].values()]:
                 print(f"\"You already have a magnificent suit of armour!\"")
                 continue
+
             elif any(item.get('Name') == armour_name for item in character['Inventory'].values()):
                 print(f"You already have {armour_name} in your inventory.")
                 continue
 
             else:
                 print(f"You bought {armour_name}!")
-                character['Gold'] -= armour_cost
-                add_equipment(character, armour_name, 1, "Armour")
+                if armour_name == "Leather Armour":
+                    character['Gold'] -= armour_cost
+                    add_equipment(character, armour_name, 1, "Armour")
+                elif armour_name == "Iron Armour":
+                    character['Gold'] -= armour_cost
+                    add_equipment(character, armour_name, 2, "Armour")
 
         elif choice == "3":
-            print("1. Health Potion\n2. AP Potion")
+            print("1. Health Potion $5\n2. AP Potion $10")
             potion_choice = input("Enter the number of the potion you want to buy: ")
 
             if potion_choice == "1":
