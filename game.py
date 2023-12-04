@@ -32,10 +32,16 @@ def make_board(rows, columns):
             elif (row, column) == (rows - 1, 0):
                 board[(row, column)] = "Inferno Lair"
 
+            elif (row, column) == (rows - 1, columns - 2):
+                board[(row, column)] = "Fire Guardian Room"
+
             elif (row, column) == (0, columns - 1):
                 board[(row, column)] = "Winter Sanctum"
 
-            elif (row, column) == (2, 2):
+            elif (row, column) == (rows - 2, columns - 1):
+                board[(row, column)] = "Ice Guardian Room"
+
+            elif (row, column) == (int(rows / 2), int(columns / 2)):
                 board[(row, column)] = "Traveling Merchant"
 
             else:
@@ -113,11 +119,11 @@ def show_map(board_rows, board_columns, character):
             position = (row, column)
             if position == player_location:
                 print("| @Player", end="")
-            elif position == (2, 2):
+            elif position == (int(rows / 2), int(columns / 2)):
                 print("| $Shop ", end=" ")
-            elif position in [(4, 0), (0, 4)]:
+            elif position in [(rows - 1, 0), (0, columns - 1), (rows - 1, columns - 2), (rows - 2, columns - 1)]:
                 print("|#Special", end="")
-            elif position == (4, 4):
+            elif position == (rows - 1, columns - 1):
                 print("| #Boss ", end=" ")
             else:
                 print(f"| ({row}, {column})", end=" ")
@@ -175,10 +181,21 @@ def describe_current_location(board, character):
         print("You see nothing interesting in this room.")
     elif board[player_location] == "Dark Room":
         print("You see nothing but darkness in this room.")
+    elif board[player_location] == "Traveling Merchant":
+        print("You see a merchant selling wares.")
     elif board[player_location] == "Inferno Lair":
         print("You sense the warmth emanating from the scorching depths of molten rage and foreboding radiance.")
+    elif board[player_location] == "Fire Guardian Room":
+        print("You see a fiery sentinel standing watch over an orb pedestal.")
     elif board[player_location] == "Winter Sanctum":
         print("You feel the frigid embrace of winter, adorned with shimmering ice formations.")
+    elif board[player_location] == "Ice Guardian Room":
+        print("You see an icy sentinel standing watch over an orb pedestal.")
+    elif (board[player_location] == "Final Room" and
+          not any(item['Name'] == "Flame Orb" for item in character['Inventory'].values()) or
+          not any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())):
+        print("You see a large, menacing creature guarding the room.")
+        print("You must find the two special items to defeat this foe.")
 
 
 def get_user_choice(rows, columns, character):
@@ -380,7 +397,7 @@ def generate_special_foe(board, character):
 
     if board.get(coordinate) == "Winter Sanctum":
         return {
-            "Name": "Winter Monster",
+            "Name": "Abominable Snowman",
             "Attack": 5,
             "Current HP": 30,
             "Defence": 2,
@@ -392,7 +409,7 @@ def generate_special_foe(board, character):
         }
     elif board.get(coordinate) == "Inferno Lair":
         return {
-            "Name": "Lava Monster",
+            "Name": "Dragon",
             "Attack": 8,
             "Current HP": 50,
             "Defence": 3,
@@ -740,6 +757,32 @@ def game():  # called from main
             player_location = (character["X-coordinate"], character["Y-coordinate"])
 
             if board.get(player_location) in ["Winter Sanctum", "Inferno Lair"]:
+                special_foe = generate_special_foe(board, character)
+                print(f"You are facing {special_foe['Name']}!")
+
+                combat_result = combat_loop(character, special_foe)
+
+                if not combat_result:
+                    break
+
+                if character['Experience Points'] >= character['EXP to Level Up']:
+                    level_up(character)
+
+            elif (board.get(player_location) == "Ice Guardian Room"
+                  and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())):
+                special_foe = generate_special_foe(board, character)
+                print(f"You are facing {special_foe['Name']}!")
+
+                combat_result = combat_loop(character, special_foe)
+
+                if not combat_result:
+                    break
+
+                if character['Experience Points'] >= character['EXP to Level Up']:
+                    level_up(character)
+
+            elif (board.get(player_location) == "Fire Guardian Room"
+                  and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())):
                 special_foe = generate_special_foe(board, character)
                 print(f"You are facing {special_foe['Name']}!")
 
