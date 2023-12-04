@@ -387,6 +387,7 @@ def generate_special_foe(board, character):
             "Ability": "Freeze",
             "Gold": 50,
             "Experience Points": 50,
+            "Special Item": "Frozen Orb",
 
         }
     elif board.get(coordinate) == "Inferno Lair":
@@ -398,7 +399,7 @@ def generate_special_foe(board, character):
             "Ability": "Burn",
             "Gold": 100,
             "Experience Points": 50,
-            "Special Item": "Radiant Sword",
+            "Special Item": "Flame Orb",
         }
     elif board.get(coordinate) == "Final Room":
         return {
@@ -408,10 +409,11 @@ def generate_special_foe(board, character):
             "Defence": 4,
             "Gold": 1000,
             "Experience Points": 1000,
+            "Special Item": "Chocolate Orb",
         }
 
 
-def check_location(board, character):
+def check_win_condition(board, character):
     """
     Check if user has reached the goal.
 
@@ -425,23 +427,20 @@ def check_location(board, character):
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
     >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5}
-    >>> check_location(board_test, character_test)
+    >>> check_win_condition(board_test, character_test)
     False
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
     >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Current HP": 5}
-    >>> check_location(board_test, character_test)
+    >>> check_win_condition(board_test, character_test)
     True
     """
     x = character["X-coordinate"]
     y = character["Y-coordinate"]
     coordinate = (x, y)
 
-    if board.get(coordinate) == "Final Room":
+    if board.get(coordinate) == "Final Room" and "Chocolate Orb" in character['Inventory']:
         return True
-    elif board.get(coordinate) == "Traveling Merchant":
-        visit_shop(character)
-        return False
     else:
         return False
 
@@ -730,7 +729,7 @@ def game():  # called from main
             move_character(character, direction)
             player_location = (character["X-coordinate"], character["Y-coordinate"])
 
-            if board.get(player_location) in ["Winter Sanctum", "Inferno Lair", "Final Room"]:
+            if board.get(player_location) in ["Winter Sanctum", "Inferno Lair"]:
                 special_foe = generate_special_foe(board, character)
                 print(f"You are facing {special_foe['Name']}!")
 
@@ -741,6 +740,28 @@ def game():  # called from main
 
                 if character['Experience Points'] >= character['EXP to Level Up']:
                     level_up(character)
+
+            elif (board.get(player_location) == "Final Room"
+                  and "Flame Orb" in character['Inventory']
+                  and "Winter Orb" in character['Inventory']):
+                special_foe = generate_special_foe(board, character)
+                print(f"You are facing {special_foe['Name']}!")
+
+                combat_result = combat_loop(character, special_foe)
+
+                if not combat_result:
+                    break
+
+                if character['Experience Points'] >= character['EXP to Level Up']:
+                    level_up(character)
+
+                if is_alive(character) and achieved_goal and "Chocolate Orb" in character['Inventory']:
+                    print(f"You have beat the Final Boss!")
+                    print("Congratulations, you win a life-time supply of your favourite chocolate!")
+                    break
+
+            elif board.get(player_location) == "Traveling Merchant":
+                visit_shop(character)
 
             else:
                 there_is_a_challenger = check_for_foes()
@@ -759,18 +780,13 @@ def game():  # called from main
                     if character['Experience Points'] >= character['EXP to Level Up']:
                         level_up(character)
 
-            achieved_goal = check_location(board, character)
+            achieved_goal = check_win_condition(board, character)
 
         else:
             print("You cannot go that direction.")
 
         if character["Current HP"] == 0:
             print("You lost all your HP! You lose!")
-            break
-
-        elif is_alive(character) and achieved_goal:
-            print(f"You have arrived at the Final Room!")
-            print("Congratulations, you win a life-time supply of your favourite chocolate!")
             break
 
 
