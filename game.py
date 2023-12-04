@@ -29,6 +29,8 @@ def make_board(rows, columns):
             elif (row, column) == (rows - 1, columns - 1):
                 board[(row, column)] = "Chocolate Room"
 
+            elif (row, column) == (2, 2):
+                board[(row, column)] = "Traveling Merchant"
             else:
                 room = random.choice(room_list)
                 board[(row, column)] = room
@@ -56,7 +58,14 @@ def make_character():
         "Current HP": 10,
         "Attack Power": 1,
         "Defence": 0,
-        "Inventory": [],
+        "Abilities": {
+            1: {"Name": "Slash", "Power": 2},
+        },
+        "Inventory": {
+            1: {"Name": "Bronze Sword", "Power": 1},
+            2: {"Name": "Clothes", "Power": 0},
+        },
+        "Gold": 100,
         "Level": 1,
         "Experience Points": 0,
         "EXP to Level Up": 10
@@ -71,9 +80,11 @@ def get_character_stats(character):
     print(f"Your current HP is {character['Current HP']}.")
     print(f"Your current Attack Power is {character['Attack Power']}.")
     print(f"Your current Defence is {character['Defence']}.")
+    print(f"Your current Abilities are {character['Abilities']}.")
     print(f"Your current Experience Points is {character['Experience Points']}.")
     print(f"Your current EXP to Level Up is {character['EXP to Level Up']}.")
     print(f"Your current Inventory is {character['Inventory']}.")
+    print(f"Your current Gold is {character['Gold']}.")
     print(f"Your current coordinates are ({character['X-coordinate']},{character['X-coordinate']}).")
 
 
@@ -290,6 +301,7 @@ def generate_foe():
         "Attack Power": random.randint(1, 2),
         "Current HP": random.randint(2, 4),
         "Defence": 0,
+        "Gold": 50
     }
 
 
@@ -321,9 +333,78 @@ def check_location(board, character):
 
     if board.get(coordinate) == "Chocolate Room":
         return True
-
+    elif board.get(coordinate) == "Traveling Merchant":
+        visit_shop(character)
+        return False
     else:
         return False
+
+
+def visit_shop(character):
+    """
+    """
+    print("Welcome to the Shop!")
+
+    while True:
+        print("1. Buy Weapon")
+        print("2. Buy Armor")
+        print("3. Buy Health Potion")
+        print("4. Leave Shop")
+        print(f"You currently have {character['Gold']} gold.")
+        choice = input("Choose an option (1, 2, 3, or 4): ")
+
+        if choice == "1":
+            weapon_cost = 10
+            if character['Gold'] >= weapon_cost:
+                print("You bought a bronze sword!")
+                character['Gold'] -= weapon_cost
+                character['Attack Power'] += 1
+            else:
+                print("Not enough gold to buy the weapon.")
+
+        elif choice == "2":
+            armor_cost = 10
+            if character['Gold'] >= armor_cost:
+                print("You bought leather armor!")
+                character['Gold'] -= armor_cost
+                character['Defence'] += 1
+            else:
+                print("Not enough gold to buy the armor.")
+
+        elif choice == "3":
+            potion_cost = 5
+            if character['Gold'] >= potion_cost:
+                print("You bought a healing potion!")
+                character['Gold'] -= potion_cost
+                if "Health Potion" in character['Inventory']:
+                    character['Inventory']["Health Potion"] += 1
+                else:
+                    character['Inventory']["Health Potion"] = 1
+
+            else:
+                print("Not enough gold to buy the health potion.")
+
+        elif choice == "4":
+            print("Thanks for visiting the Shop! Come again.")
+            break
+
+        else:
+            print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
+
+    return character
+
+
+def add_inventory(character, item_name, item_power):
+    # Check if the item is already in the inventory
+    for key, value in character['Inventory'].items():
+        if value['Name'] == item_name:
+            print(f"You already have {item_name} in your inventory.")
+            return
+
+    inventory_key_count = len(character['Inventory']) + 1
+    new_item = {"Name": item_name, "Power": item_power}
+    character['Inventory'][inventory_key_count] = new_item
+    print(f'You added {item_name} to your inventory!')
 
 
 def combat_loop(character, foe):
@@ -346,10 +427,15 @@ def combat_loop(character, foe):
     while is_alive(character) and is_alive(foe):
         print(f"Your HP: {character['Current HP']}")
         print(f"{foe['Name']}'s HP: {foe['Current HP']}")
-        action = input("Do you want to attack(1) or run(2)? ")
+        print("Options:")
+        print("1. Attack")
+        print("2. Use Ability")
+        print("3. Use Items")
+        print("4. Run Away")
+
+        action = input("Choose an option (1, 2, 3, or 4): ")
 
         if action == "1":
-            # Player attacks the foe
             damage_dealt = max(0, character['Attack Power'] - foe['Defence'])
             foe['Current HP'] -= damage_dealt
             print(f"You dealt {damage_dealt} damage to the {foe['Name']}!")
@@ -361,79 +447,57 @@ def combat_loop(character, foe):
                 print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
         elif action == "2":
+            print("Choose an ability: ")
+            for key, value in character['Abilities'].items():
+                print(f"{key} {value}")
+
+            skill_choice = input("Enter the number of the skill you want to use: ")
+
+            if int(skill_choice) in character['Abilities']:
+                ability = character['Abilities'][int(skill_choice)]
+                damage_dealt = max(0, character['Attack Power'] + ability['Power'] - foe['Defence'])
+                foe['Current HP'] -= damage_dealt
+                print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
+            else:
+                print("Invalid skill choice.")
+
+            if is_alive(foe):
+                damage_taken = max(0, foe['Attack Power'] - character['Defence'])
+                character['Current HP'] -= damage_taken
+                print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
+
+        elif action == "3":
+            print("Your Inventory:")
+            print(character['Inventory'])
+            item_choice = input("Choose an item to use: ")
+            if item_choice == 'Health Potion' and 'Health Potion' in character['Inventory']:
+                character['Inventory'].remove('Health Potion')
+                character['Current HP'] += 5
+                if character['Current HP'] > character['Max HP']:
+                    character['Current HP'] = character['Max HP']
+                print("You used a Health Potion and healed 5 health!")
+            else:
+                print("Invalid item choice or item not available.")
+
+        elif action == "4":
+            # Player chooses to run away
             print("You run away from the battle.")
             return False, character
 
         else:
-            print("Invalid choice. Please enter '1' to attack or '2' to run.")
+            print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
 
     if is_alive(foe):
         print(f"You were defeated by the {foe['Name']}. Game over!")
         return False
     else:
-        print(f"You defeated the {foe['Name']}!")
+        print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
         experience_gained = 15 if foe['Attack Power'] > character['Level'] else 10
         character["Experience Points"] += experience_gained
         print(f"You gained {experience_gained} experience points!")
+        character['Gold'] += foe['Gold']
+        print(f"Your total gold is now {character['Gold']}.")
         return True, character
-
-
-def guessing_game(character):
-    """
-    Play a game where you have to guess a random number between 1 and 5.
-
-    You must guess a random number between 1 and 5 until you get it correct. If you get it correct, then you beat the
-    demon and can return to exploring the map. If you get it wrong, you lose 1 HP and you must play again until you beat
-    the demon.
-
-    :param character: a non-empty dictionary
-    :precondition: character must be a dictionary with x, y coordinates, and HP counter
-    :precondition: character must be alive with greater than 0 HP
-    :postcondition: choosing the right number allows the character to leave the guessing game
-    :postcondition: choosing the wrong number lowers player HP by 1, and you leave the guessing game
-    :postcondition: inputting a string or float lowers player HP by 1, and you leave the guessing game
-    :postcondition: if your HP is 0, then it is game over you must start the game again from a new character
-    :return: returns an updated character HP if you win
-    :return: returns a game over message if your health is 0
-    """
-    lower = 1
-    upper = 5
-
-    print(f"An annoying little demon stands in your way!")
-    print(f"\"HellOoOoOOo~ You have to play a little game with me, adventurer.\"")
-    print(f"\"You have to guess a number between {lower} and {upper}... OR ELSE!\"")
-    print(f"\"My creator told me it also has be an *integer*, not a float or string.\"")
-
-    while character["Current HP"] != 0:
-        secret_number = random.randint(lower, upper)
-        guess = input(f"Guess a number between {lower} and {upper}: ")
-
-        if guess.isdigit():
-            guess = int(guess)
-            if guess == secret_number:
-                print("\"Holy moly! How are you so smart?!\"")
-                print("You kick the annoying little demon in the butt and it runs away.")
-                print("\"AHHHHHHHH\"")
-                print(f"Your current HP is {character['Current HP']}.")
-                return character
-
-            else:
-                print(f"\"Hahaha! You're terrible at this! The number was {secret_number}.\"")
-                print("The annoying little demon kicks your butt and you lose 1 HP.")
-                print("\"Let's play again next time! Hahaha!\"")
-                character["Current HP"] -= 1
-                print(f"Your current HP is {character['Current HP']}.")
-                return character
-
-        else:
-            print(f"\"That's not what I was asking for, idiot.\"")
-            print("The annoying little demon bonks your head and you lose 1 HP.")
-            print("\"I hope that clears your head. Hahaha!\"")
-            character["Current HP"] -= 1
-            print(f"Your current HP is {character['Current HP']}.")
-            return character
-
-    return character
 
 
 def is_alive(character):
@@ -481,7 +545,6 @@ def game():  # called from main
                 # Generate a foe
                 foe = generate_foe()
                 print(f"You are facing a {foe['Name']}!")
-                # guessing_game(character)
 
                 # Combat loop
                 combat_result = combat_loop(character, foe)
