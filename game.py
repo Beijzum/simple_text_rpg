@@ -292,26 +292,45 @@ def check_for_foes():
 
 
 def generate_foe():
-    """
-    Generate a foe with random attributes.
+    foe_types = ["Goblin", "Orc", "Skeleton", "Ghoul"]
+    random_foe = random.choice(foe_types)
 
-    :param: N/A
-    :precondition: character must be alive with greater than 0 HP
-    :postcondition: creates a foe dictionary with random attributes
-    :return: a dictionary representing the foe with attributes like 'Attack' and 'HP'
-
-    # >>> generate_foe()
-    # {'Name': 'Goblin', 'Attack': 2, 'Current HP': 5}
-    Dunno how to test yet. @patch?
-    """
-    foe_names = ["Goblin", "Orc", "Skeleton", "Dragon"]
-    return {
-        "Name": random.choice(foe_names),
-        "Attack": random.randint(1, 2),
-        "Current HP": random.randint(2, 4),
-        "Defence": 0,
-        "Gold": 50
-    }
+    if random_foe == "Goblin":
+        return {
+            "Name": "Goblin",
+            "Attack": random.randint(1, 2),
+            "Current HP": random.randint(3, 4),
+            "Defence": 0,
+            "Gold": 10,
+            "Experience Points": 5,
+        }
+    elif random_foe == "Orc":
+        return {
+            "Name": "Orc",
+            "Attack": random.randint(2, 4),
+            "Current HP": random.randint(4, 6),
+            "Defence": 1,
+            "Gold": 25,
+            "Experience Points": 15,
+        }
+    elif random_foe == "Skeleton":
+        return {
+            "Name": "Skeleton",
+            "Attack": random.randint(2, 3),
+            "Current HP": random.randint(2, 4),
+            "Defence": 1,
+            "Gold": 15,
+            "Experience Points": 10,
+        }
+    elif random_foe == "Ghoul":
+        return {
+            "Name": "Ghoul",
+            "Attack": random.randint(1, 2),
+            "Current HP": random.randint(6, 8),
+            "Defence": 0,
+            "Gold": 15,
+            "Experience Points": 10,
+        }
 
 
 def check_location(board, character):
@@ -557,9 +576,8 @@ def combat_loop(character, foe):
         return False
     else:
         print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
-        experience_gained = 15 if foe['Attack'] > character['Level'] else 10
-        character["Experience Points"] += experience_gained
-        print(f"You gained {experience_gained} experience points!")
+        character["Experience Points"] += foe['Experience Points']
+        print(f"You gained {foe['Experience Points']} experience points!")
         character['Gold'] += foe['Gold']
         print(f"Your total gold is now {character['Gold']}.")
         return True, character
