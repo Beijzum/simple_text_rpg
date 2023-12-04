@@ -62,8 +62,8 @@ def make_character():
             1: {"Name": "Slash", "Power": 2},
         },
         "Inventory": {
-            1: {"Name": "Bronze Sword", "Power": 1},
-            2: {"Name": "Clothes", "Power": 0},
+            1: {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
+            2: {"Name": "Clothes", "Power": 0, "Type": "Armour"},
         },
         "Gold": 100,
         "Level": 1,
@@ -83,9 +83,15 @@ def get_character_stats(character):
     print(f"Your current Abilities are {character['Abilities']}.")
     print(f"Your current Experience Points is {character['Experience Points']}.")
     print(f"Your current EXP to Level Up is {character['EXP to Level Up']}.")
-    print(f"Your current Inventory is {character['Inventory']}.")
     print(f"Your current Gold is {character['Gold']}.")
     print(f"Your current coordinates are ({character['X-coordinate']},{character['X-coordinate']}).")
+
+
+def get_character_inventory(character):
+    """
+    """
+    for key, value in character['Inventory'].items():
+        print(f"Item #{key} {value}.")
 
 
 def level_up(character):
@@ -155,7 +161,7 @@ def get_user_choice(character):
         print("2. Down")
         print("3. Left")
         print("4. Right")
-        user_input = input("Please choose a direction (1, 2, 3, or 4) or get character status(5): ")
+        user_input = input("Please choose a direction (1, 2, 3, or 4) or get character status(5), inventory(6): ")
 
         if user_input == "1":
             print("You chose to go up...")
@@ -175,6 +181,9 @@ def get_user_choice(character):
 
         elif user_input == "5":
             get_character_stats(character)
+
+        elif user_input == "6":
+            get_character_inventory(character)
 
         else:
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
@@ -355,34 +364,42 @@ def visit_shop(character):
 
         if choice == "1":
             weapon_cost = 10
-            if character['Gold'] >= weapon_cost:
-                print("You bought a bronze sword!")
-                character['Gold'] -= weapon_cost
-                character['Attack Power'] += 1
-            else:
+            weapon_name = "Iron Sword"
+
+            if character['Gold'] < weapon_cost:
                 print("Not enough gold to buy the weapon.")
+            elif any(item.get('Name') == weapon_name for item in character['Inventory'].values()):
+                print(f"You already have {weapon_name} in your inventory.")
+                continue
+            else:
+                print(f"You bought {weapon_name}!")
+                character['Gold'] -= weapon_cost
+                add_equipment(character, weapon_name, 2, "Weapon")
 
         elif choice == "2":
-            armor_cost = 10
-            if character['Gold'] >= armor_cost:
-                print("You bought leather armor!")
-                character['Gold'] -= armor_cost
-                character['Defence'] += 1
+            armour_cost = 10
+            armour_name = "Leather armour"
+
+            if character['Gold'] < armour_cost:
+                print("Not enough gold to buy the armour.")
+            elif any(item.get('Name') == armour_name for item in character['Inventory'].values()):
+                print(f"You already have {armour_name} in your inventory.")
+                continue
             else:
-                print("Not enough gold to buy the armor.")
+                print(f"You bought {armour_name}!")
+                character['Gold'] -= armour_cost
+                add_equipment(character, armour_name, 1, "Armour")
 
         elif choice == "3":
             potion_cost = 5
-            if character['Gold'] >= potion_cost:
-                print("You bought a healing potion!")
-                character['Gold'] -= potion_cost
-                if "Health Potion" in character['Inventory']:
-                    character['Inventory']["Health Potion"] += 1
-                else:
-                    character['Inventory']["Health Potion"] = 1
+            potion_name = "Health Potion"
 
-            else:
+            if character['Gold'] < potion_cost:
                 print("Not enough gold to buy the health potion.")
+            else:
+                print(f"You bought a {potion_name}!")
+                character['Gold'] -= potion_cost
+                add_inventory(character, potion_name, 5, 1, "Consumable")
 
         elif choice == "4":
             print("Thanks for visiting the Shop! Come again.")
@@ -394,17 +411,38 @@ def visit_shop(character):
     return character
 
 
-def add_inventory(character, item_name, item_power):
-    # Check if the item is already in the inventory
+def add_equipment(character, item_name, item_power, item_type):
     for key, value in character['Inventory'].items():
         if value['Name'] == item_name:
             print(f"You already have {item_name} in your inventory.")
             return
+        elif item_type == "Weapon" and value['Type'] == "Weapon":
+            print(f"Replacing {value['Name']} with {item_name} in your inventory.")
+            character['Attack Power'] -= value['Power']
+            value['Name'] = item_name
+            value['Power'] = item_power
+            character['Attack Power'] += item_power
 
+        elif item_type == "Armour" and value['Type'] == "Armour":
+            print(f"Replacing {value['Name']} with {item_name} in your inventory.")
+            character['Defence'] -= value['Power']
+            value['Name'] = item_name
+            value['Power'] = item_power
+            character['Defence'] += item_power
+
+
+def add_inventory(character, item_name, item_power, item_quantity, item_type):
+    for key, value in character['Inventory'].items():
+        if value['Name'] == item_name and value['Type'] == "Consumable":
+            print(f"You added {item_quantity} {item_name}(s) to your inventory!")
+            value['Quantity'] += item_quantity
+            return
+
+    # If the item is not in the inventory or is a non-consumable, add a new entry
     inventory_key_count = len(character['Inventory']) + 1
-    new_item = {"Name": item_name, "Power": item_power}
+    new_item = {"Name": item_name, "Power": item_power, "Quantity": item_quantity, "Type": item_type}
     character['Inventory'][inventory_key_count] = new_item
-    print(f'You added {item_name} to your inventory!')
+    print(f'You added {item_quantity} {item_name}(s) to your inventory!')
 
 
 def combat_loop(character, foe):
@@ -449,7 +487,7 @@ def combat_loop(character, foe):
         elif action == "2":
             print("Choose an ability: ")
             for key, value in character['Abilities'].items():
-                print(f"{key} {value}")
+                print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)}")
 
             skill_choice = input("Enter the number of the skill you want to use: ")
 
@@ -460,6 +498,7 @@ def combat_loop(character, foe):
                 print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
             else:
                 print("Invalid skill choice.")
+                continue
 
             if is_alive(foe):
                 damage_taken = max(0, foe['Attack Power'] - character['Defence'])
@@ -467,17 +506,23 @@ def combat_loop(character, foe):
                 print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
         elif action == "3":
-            print("Your Inventory:")
-            print(character['Inventory'])
-            item_choice = input("Choose an item to use: ")
-            if item_choice == 'Health Potion' and 'Health Potion' in character['Inventory']:
-                character['Inventory'].remove('Health Potion')
-                character['Current HP'] += 5
-                if character['Current HP'] > character['Max HP']:
-                    character['Current HP'] = character['Max HP']
-                print("You used a Health Potion and healed 5 health!")
+            consumables_exist = any(item.get('Type') == "Consumable" for item in character['Inventory'].values())
+
+            if consumables_exist:
+                print("Your Inventory:")
+                for key, value in character['Inventory'].items():
+                    if value.get('Type') == "Consumable":
+                        print(f"{key}. {value['Name']} x{value.get('Quantity', 0)}")
             else:
-                print("Invalid item choice or item not available.")
+                print("You have no consumables in your inventory.")
+                continue
+
+            item_choice = input("Choose an item to use: ")
+            if item_choice.isdigit():
+                use_item_success = use_item(character, int(item_choice))
+
+                if not use_item_success:
+                    continue
 
         elif action == "4":
             # Player chooses to run away
@@ -498,6 +543,31 @@ def combat_loop(character, foe):
         character['Gold'] += foe['Gold']
         print(f"Your total gold is now {character['Gold']}.")
         return True, character
+
+
+def use_item(character, item_key):
+    """
+    """
+    selected_item = character['Inventory'].get(item_key)
+
+    if not selected_item:
+        print("Invalid item selection.")
+        return False
+
+    if selected_item['Quantity'] <= 0:
+        print(f"You don't have any {selected_item['Name']} left.")
+        return False
+
+    if "Health Potion" in selected_item["Name"]:
+        healing_amount = selected_item["Power"]
+        character['Current HP'] = min(character['Max HP'], character['Current HP'] + healing_amount)
+        selected_item['Quantity'] -= 1
+
+        print(f"You used a {selected_item['Name']} and healed {healing_amount} health!")
+        return True
+
+    print(f"You can't use {selected_item['Name']} in combat.")
+    return False
 
 
 def is_alive(character):
