@@ -69,6 +69,7 @@ def make_character():
         "Y-coordinate": 0,
         "Max HP": 10,
         "Current HP": 10,
+        "Max AP": 5,
         "Ability Points": 5,
         "Attack": 1,
         "Defence": 0,
@@ -92,6 +93,8 @@ def get_character_stats(character):
     print(f"Your current Level is {character['Level']}.")
     print(f"Your current Max HP is {character['Max HP']}.")
     print(f"Your current HP is {character['Current HP']}.")
+    print(f"Your current Max AP is {character['Max AP']}.")
+    print(f"Your current Ability Points is {character['Ability Points']}.")
     print(f"Your current Attack is {character['Attack']}.")
     print(f"Your current Defence is {character['Defence']}.")
     print(f"Your current Abilities are {character['Abilities']}.")
@@ -137,7 +140,9 @@ def level_up(character):
     """
     """
     character["Max HP"] += 5
-    character["Current HP"] = character["Max HP"]
+    character["Current HP"] = character["Max HP"]  # Player recovers full HP
+    character["Max AP"] += 2
+    character["Ability Points"] = character["Max AP"]  # Player recovers full AP
     character["Attack"] += 1
     character["Defence"] += 1
     character["Level"] += 1
@@ -551,15 +556,32 @@ def visit_shop(character):
                 add_equipment(character, armour_name, 1, "Armour")
 
         elif choice == "3":
-            potion_cost = 5
-            potion_name = "Health Potion"
+            print("1. Health Potion\n2. AP Potion")
+            potion_choice = input("Enter the number of the potion you want to buy: ")
+
+            if potion_choice == "1":
+                potion_cost = 5
+                potion_name = "Health Potion"
+
+            elif potion_choice == "2":
+                potion_cost = 10
+                potion_name = "AP Potion"
+
+            else:
+                print("Invalid choice. Please enter a valid option.")
+                return
 
             if character['Gold'] < potion_cost:
-                print("\"Not enough gold to buy the health potion.\"")
+                print("\"Not enough gold to buy the potion.\"")
+
             else:
                 print(f"You bought a {potion_name}!")
-                character['Gold'] -= potion_cost
-                add_inventory(character, potion_name, 5, 1, "Consumable")
+                if potion_name == "Health Potion":
+                    character['Gold'] -= potion_cost
+                    add_inventory(character, potion_name, 10, 1, "Consumable")
+                elif potion_name == "AP Potion":
+                    character['Gold'] -= potion_cost
+                    add_inventory(character, potion_name, 5, 1, "Consumable")
 
         elif choice == "4":
             print(f"\"Thanks for visiting the Shop! Come again.\"")
@@ -659,9 +681,11 @@ def combat_loop(character, foe):
 
                 if skill_choice in character['Abilities']:
                     ability = character['Abilities'][skill_choice]
+                    ability_cost = ability['AP Cost']
                     damage_dealt = max(0, character['Attack'] + ability['Power'] - foe['Defence'])
                     foe['Current HP'] -= damage_dealt
                     print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
+                    character['Ability Points'] -= ability_cost
 
                 else:
                     raise ValueError("Invalid skill choice")
