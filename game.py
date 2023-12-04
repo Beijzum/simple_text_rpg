@@ -69,10 +69,11 @@ def make_character():
         "Y-coordinate": 0,
         "Max HP": 10,
         "Current HP": 10,
+        "Ability Points": 5,
         "Attack": 1,
         "Defence": 0,
         "Abilities": {
-            1: {"Name": "Power Strike", "Power": 2},
+            1: {"Name": "Power Strike", "Power": 2, "AP Cost": 1},
         },
         "Inventory": {
             1: {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
@@ -147,7 +148,23 @@ def level_up(character):
     print(f"Your Attack is now {character['Attack']}.")
     print(f"Your Defence is now {character['Defence']}.")
 
+    learn_skill(character)
+
     return character
+
+
+def learn_skill(character):
+    if character['Level'] == 3:
+        ability_count = len(character['Inventory']) + 1
+        new_ability = {"Name": "Multi-Strike", "Power": 4, "AP Cost": 2}
+        character['Abilities'][ability_count] = new_ability
+        print(f"You learned a new ability: {new_ability['Name']}!")
+
+    if character['Level'] == 5:
+        ability_count = len(character['Inventory']) + 1
+        new_ability = {"Name": "Holy Strike", "Power": 5, "AP Cost": 3}
+        character['Abilities'][ability_count] = new_ability
+        print(f"You learned a new ability: {new_ability['Name']}!")
 
 
 def describe_current_location(board, character):
@@ -704,26 +721,30 @@ def combat_loop(character, foe):
         print(f"You were defeated by the {foe['Name']}. Game over!")
         return False
     else:
-        print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
-        character["Experience Points"] += foe['Experience Points']
-        print(f"You gained {foe['Experience Points']} experience points!")
-        character['Gold'] += foe['Gold']
-        print(f"Your total gold is now {character['Gold']}.")
-        # Check for special item in foe's inventory
-        special_item = foe.get('Special Item')
-        if special_item:
-            print(f"You obtained a special item: {special_item}!")
-            add_inventory(character, special_item, 0, 1, "Special")
-        # Check for equipment item in foe's inventory
-        equipment_item = foe.get('Equipment Item')
-        if equipment_item == "Radiant Blade":
-            print(f"You obtained a special item: {equipment_item}!")
-            add_equipment(character, equipment_item, 5, "Weapon")
-        elif equipment_item == "Guardian Armour":
-            print(f"You obtained a special item: {equipment_item}!")
-            add_equipment(character, equipment_item, 3, "Armour")
+        battle_rewards(character, foe)
 
         return True, character
+
+
+def battle_rewards(character, foe):
+    print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
+    character["Experience Points"] += foe['Experience Points']
+    print(f"You gained {foe['Experience Points']} experience points!")
+    character['Gold'] += foe['Gold']
+    print(f"Your total gold is now {character['Gold']}.")
+    # Check for special item in foe's inventory
+    special_item = foe.get('Special Item')
+    if special_item:
+        print(f"You obtained a special item: {special_item}!")
+        add_inventory(character, special_item, 0, 1, "Special")
+    # Check for equipment item in foe's inventory
+    equipment_item = foe.get('Equipment Item')
+    if equipment_item == "Radiant Blade":
+        print(f"You obtained a special item: {equipment_item}!")
+        add_equipment(character, equipment_item, 5, "Weapon")
+    elif equipment_item == "Guardian Armour":
+        print(f"You obtained a special item: {equipment_item}!")
+        add_equipment(character, equipment_item, 3, "Armour")
 
 
 def use_item(character, item_key):
