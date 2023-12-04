@@ -94,8 +94,9 @@ def get_character_inventory(character):
         print(f"Item #{key} {value}.")
 
 
-def show_map(board, character):
-    rows, columns = 5, 5
+def show_map(board_rows, board_columns, character):
+    rows = board_rows
+    columns = board_columns
 
     player_location = character["X-coordinate"], character["Y-coordinate"]
 
@@ -169,7 +170,7 @@ def describe_current_location(board, character):
         print("You see nothing but darkness in this room.")
 
 
-def get_user_choice(board, character):
+def get_user_choice(rows, columns, character):
     """
     Prompt user for input to choose a direction from a numbered list.
 
@@ -205,7 +206,7 @@ def get_user_choice(board, character):
             return "right"
 
         elif user_input == "5":
-            show_map(board, character)
+            show_map(rows, columns, character)
 
         elif user_input == "6":
             get_character_inventory(character)
@@ -671,7 +672,7 @@ def game():  # called from main
     while not achieved_goal:
         # Tell the user where they are
         describe_current_location(board, character)
-        direction = get_user_choice(board, character)
+        direction = get_user_choice(rows, columns, character)
         valid_move = validate_move(board, character, direction)
 
         if valid_move:
