@@ -44,11 +44,11 @@ def make_character():
 
     :param: N/A
     :precondition: a dictionary with x, y coordinates, and HP counter
-    :postcondition: creates a character with the given starting location, HP, attack power, and armor
-    :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack Power, and 0 Armor
+    :postcondition: creates a character with the given starting location, HP, Attack, and armor
+    :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack, and 0 Armor
 
 #     >>> make_character()
-#     {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack Power': 1, 'Defence': 0, 'Inventory': [], \
+#     {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack': 1, 'Defence': 0, 'Inventory': [], \
 # 'Level': 1, 'Experience Points': 0, 'EXP to Level Up': 10}
     """
     return {
@@ -56,10 +56,10 @@ def make_character():
         "Y-coordinate": 0,
         "Max HP": 10,
         "Current HP": 10,
-        "Attack Power": 1,
+        "Attack": 1,
         "Defence": 0,
         "Abilities": {
-            1: {"Name": "Slash", "Power": 2},
+            1: {"Name": "Power Strike", "Power": 1},
         },
         "Inventory": {
             1: {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
@@ -78,7 +78,7 @@ def get_character_stats(character):
     print(f"Your current Level is {character['Level']}.")
     print(f"Your current Max HP is {character['Max HP']}.")
     print(f"Your current HP is {character['Current HP']}.")
-    print(f"Your current Attack Power is {character['Attack Power']}.")
+    print(f"Your current Attack is {character['Attack']}.")
     print(f"Your current Defence is {character['Defence']}.")
     print(f"Your current Abilities are {character['Abilities']}.")
     print(f"Your current Experience Points is {character['Experience Points']}.")
@@ -99,14 +99,14 @@ def level_up(character):
     """
     character["Max HP"] += 5
     character["Current HP"] = character["Max HP"]
-    character["Attack Power"] += 1
+    character["Attack"] += 1
     character["Defence"] += 1
     character["Level"] += 1
     character['Experience Points'] -= character['EXP to Level Up']
     character['EXP to Level Up'] = int(character['EXP to Level Up'] * 1.5)
     print(f"Congratulations! You leveled up to Level {character['Level']}!")
     print(f"Your Max HP is now {character['Max HP']}.")
-    print(f"Your Attack Power is now {character['Attack Power']}.")
+    print(f"Your Attack is now {character['Attack']}.")
     print(f"Your Defence is now {character['Defence']}.")
 
     return character
@@ -298,16 +298,16 @@ def generate_foe():
     :param: N/A
     :precondition: character must be alive with greater than 0 HP
     :postcondition: creates a foe dictionary with random attributes
-    :return: a dictionary representing the foe with attributes like 'Attack Power' and 'HP'
+    :return: a dictionary representing the foe with attributes like 'Attack' and 'HP'
 
     # >>> generate_foe()
-    # {'Name': 'Goblin', 'Attack Power': 2, 'Current HP': 5}
+    # {'Name': 'Goblin', 'Attack': 2, 'Current HP': 5}
     Dunno how to test yet. @patch?
     """
     foe_names = ["Goblin", "Orc", "Skeleton", "Dragon"]
     return {
         "Name": random.choice(foe_names),
-        "Attack Power": random.randint(1, 2),
+        "Attack": random.randint(1, 2),
         "Current HP": random.randint(2, 4),
         "Defence": 0,
         "Gold": 50
@@ -418,10 +418,10 @@ def add_equipment(character, item_name, item_power, item_type):
             return
         elif item_type == "Weapon" and value['Type'] == "Weapon":
             print(f"Replacing {value['Name']} with {item_name} in your inventory.")
-            character['Attack Power'] -= value['Power']
+            character['Attack'] -= value['Power']
             value['Name'] = item_name
             value['Power'] = item_power
-            character['Attack Power'] += item_power
+            character['Attack'] += item_power
 
         elif item_type == "Armour" and value['Type'] == "Armour":
             print(f"Replacing {value['Name']} with {item_name} in your inventory.")
@@ -456,8 +456,8 @@ def combat_loop(character, foe):
     :postcondition: conducts the combat loop until either the character or the foe is defeated
     :return: returns True if the character wins, otherwise False
 
-    # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack Power': 1, 'Armor': 0},
-    # ... {'Name': 'Goblin', 'Attack Power': 2, 'Current HP': 10},
+    # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack': 1, 'Armor': 0},
+    # ... {'Name': 'Goblin', 'Attack': 2, 'Current HP': 10},
     # ... {(0, 0): "Starting Room", (1, 0): "Empty Room"})
     # True
     Dunno how to test yet. @patch?
@@ -474,55 +474,68 @@ def combat_loop(character, foe):
         action = input("Choose an option (1, 2, 3, or 4): ")
 
         if action == "1":
-            damage_dealt = max(0, character['Attack Power'] - foe['Defence'])
+            damage_dealt = max(0, character['Attack'] - foe['Defence'])
             foe['Current HP'] -= damage_dealt
             print(f"You dealt {damage_dealt} damage to the {foe['Name']}!")
 
             # Foe counterattacks
             if is_alive(foe):
-                damage_taken = max(0, foe['Attack Power'] - character['Defence'])
+                damage_taken = max(0, foe['Attack'] - character['Defence'])
                 character['Current HP'] -= damage_taken
                 print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
         elif action == "2":
-            print("Choose an ability: ")
-            for key, value in character['Abilities'].items():
-                print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)}")
+            try:
+                print("Choose an ability: ")
+                for key, value in character['Abilities'].items():
+                    print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)}")
 
-            skill_choice = input("Enter the number of the skill you want to use: ")
+                skill_choice = int(input("Enter the number of the skill you want to use: "))
 
-            if int(skill_choice) in character['Abilities']:
-                ability = character['Abilities'][int(skill_choice)]
-                damage_dealt = max(0, character['Attack Power'] + ability['Power'] - foe['Defence'])
-                foe['Current HP'] -= damage_dealt
-                print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
-            else:
-                print("Invalid skill choice.")
+                if skill_choice in character['Abilities']:
+                    ability = character['Abilities'][skill_choice]
+                    damage_dealt = max(0, character['Attack'] + ability['Power'] - foe['Defence'])
+                    foe['Current HP'] -= damage_dealt
+                    print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
+
+                else:
+                    raise ValueError("Invalid skill choice")
+
+                if is_alive(foe):
+                    damage_taken = max(0, foe['Attack'] - character['Defence'])
+                    character['Current HP'] -= damage_taken
+                    print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
+
+            except ValueError:
+                print("Please enter a valid skill number.")
                 continue
-
-            if is_alive(foe):
-                damage_taken = max(0, foe['Attack Power'] - character['Defence'])
-                character['Current HP'] -= damage_taken
-                print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
         elif action == "3":
-            consumables_exist = any(item.get('Type') == "Consumable" for item in character['Inventory'].values())
+            try:
+                # Check if there are any consumables in the inventory
+                consumables_exist = any(item.get('Type') == "Consumable" for item in character['Inventory'].values())
+                if consumables_exist:
+                    print("Your Inventory:")
+                    for key, value in character['Inventory'].items():
+                        if value.get('Type') == "Consumable":
+                            print(f"{key}. {value['Name']} x{value.get('Quantity', 0)}")
 
-            if consumables_exist:
-                print("Your Inventory:")
-                for key, value in character['Inventory'].items():
-                    if value.get('Type') == "Consumable":
-                        print(f"{key}. {value['Name']} x{value.get('Quantity', 0)}")
-            else:
-                print("You have no consumables in your inventory.")
+                else:
+                    raise ValueError("No consumables in inventory")
+
+            except ValueError as e:
+                print(e)
                 continue
 
-            item_choice = input("Choose an item to use: ")
-            if item_choice.isdigit():
-                use_item_success = use_item(character, int(item_choice))
+            try:
+                item_choice = int(input("Choose an item to use: "))
+                use_item_success = use_item(character, item_choice)
 
                 if not use_item_success:
                     continue
+
+            except ValueError:
+                print("Invalid input. Please enter a valid item number.")
 
         elif action == "4":
             # Player chooses to run away
@@ -537,7 +550,7 @@ def combat_loop(character, foe):
         return False
     else:
         print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
-        experience_gained = 15 if foe['Attack Power'] > character['Level'] else 10
+        experience_gained = 15 if foe['Attack'] > character['Level'] else 10
         character["Experience Points"] += experience_gained
         print(f"You gained {experience_gained} experience points!")
         character['Gold'] += foe['Gold']
@@ -548,26 +561,30 @@ def combat_loop(character, foe):
 def use_item(character, item_key):
     """
     """
-    selected_item = character['Inventory'].get(item_key)
+    try:
+        selected_item = character['Inventory'][item_key]
 
-    if not selected_item:
+        if selected_item['Quantity'] <= 0:
+            print(f"You don't have any {selected_item['Name']} left.")
+            return False
+
+        if "Health Potion" in selected_item["Name"]:
+            healing_amount = selected_item["Power"]
+            # Check if the character is already at max HP
+            remaining_health = min(character['Max HP'] - character['Current HP'], healing_amount)
+            # Will add the lowest amount to character health. If character is already at max HP, nothing will be added.
+            character['Current HP'] += remaining_health
+            selected_item['Quantity'] -= 1
+
+            print(f"You used a {selected_item['Name']} and healed {healing_amount} health!")
+            return True
+
+        print(f"You can't use {selected_item['Name']} in combat.")
+        return False
+
+    except KeyError:
         print("Invalid item selection.")
         return False
-
-    if selected_item['Quantity'] <= 0:
-        print(f"You don't have any {selected_item['Name']} left.")
-        return False
-
-    if "Health Potion" in selected_item["Name"]:
-        healing_amount = selected_item["Power"]
-        character['Current HP'] = min(character['Max HP'], character['Current HP'] + healing_amount)
-        selected_item['Quantity'] -= 1
-
-        print(f"You used a {selected_item['Name']} and healed {healing_amount} health!")
-        return True
-
-    print(f"You can't use {selected_item['Name']} in combat.")
-    return False
 
 
 def is_alive(character):
