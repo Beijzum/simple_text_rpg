@@ -57,8 +57,8 @@ def make_character():
 
     :param: N/A
     :precondition: a dictionary with x, y coordinates, and HP counter
-    :postcondition: creates a character with the given starting location, HP, Attack, and armor
-    :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack, and 0 Armor
+    :postcondition: creates a character with the given starting location, HP, Attack, and Defence
+    :return: a dictionary with coordinates at 0, 0, 5 HP, 1 Attack, and 0 Defence
 
 #     >>> make_character()
 #     {'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 10, 'Attack': 1, 'Defence': 0, 'Inventory': [], \
@@ -192,8 +192,8 @@ def describe_current_location(board, character):
     elif board[player_location] == "Ice Guardian Room":
         print("You see an icy sentinel standing watch over an orb pedestal.")
     elif (board[player_location] == "Final Room" and
-          not any(item['Name'] == "Flame Orb" for item in character['Inventory'].values()) or
-          not any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())):
+          not any(item['Name'] == "Radiant Blade" for item in character['Inventory'].values()) or
+          not any(item['Name'] == "Guardian Armour" for item in character['Inventory'].values())):
         print("You see a large, menacing creature guarding the room.")
         print("You must find the two special items to defeat this foe.")
 
@@ -418,6 +418,28 @@ def generate_special_foe(board, character):
             "Experience Points": 50,
             "Special Item": "Flame Orb",
         }
+    elif board.get(coordinate) == "Ice Guardian Room":
+        return {
+            "Name": "Ice Guardian",
+            "Attack": 10,
+            "Current HP": 70,
+            "Defence": 4,
+            "Ability": "Frost Strike",
+            "Gold": 100,
+            "Experience Points": 50,
+            "Equipment Item": "Guardian Armour",
+        }
+    elif board.get(coordinate) == "Fire Guardian Room":
+        return {
+            "Name": "Fire Guardian",
+            "Attack": 10,
+            "Current HP": 70,
+            "Defence": 4,
+            "Ability": "Flame Strike",
+            "Gold": 100,
+            "Experience Points": 50,
+            "Equipment Item": "Radiant Blade",
+        }
     elif board.get(coordinate) == "Final Room":
         return {
             "Name": "Final Boss",
@@ -470,7 +492,7 @@ def visit_shop(character):
 
     while True:
         print("1. Buy Weapon")
-        print("2. Buy Armor")
+        print("2. Buy Armour")
         print("3. Buy Health Potion")
         print("4. Leave Shop")
         print(f"You currently have {character['Gold']} gold.")
@@ -482,8 +504,11 @@ def visit_shop(character):
 
             if character['Gold'] < weapon_cost:
                 print("Not enough gold to buy the weapon.")
+            elif "Radiant Blade" in [item['Name'] for item in character['Inventory'].values()]:
+                print(f"\"You already have a powerful weapon!\"")
+                continue
             elif any(item.get('Name') == weapon_name for item in character['Inventory'].values()):
-                print(f"You already have {weapon_name} in your inventory.")
+                print(f"\"You already have {weapon_name} in your inventory.\"")
                 continue
             else:
                 print(f"You bought {weapon_name}!")
@@ -496,9 +521,13 @@ def visit_shop(character):
 
             if character['Gold'] < armour_cost:
                 print("Not enough gold to buy the armour.")
+            elif "Guardian Armour" in [item['Name'] for item in character['Inventory'].values()]:
+                print(f"\"You already have a magnificent suit of armour!\"")
+                continue
             elif any(item.get('Name') == armour_name for item in character['Inventory'].values()):
                 print(f"You already have {armour_name} in your inventory.")
                 continue
+
             else:
                 print(f"You bought {armour_name}!")
                 character['Gold'] -= armour_cost
@@ -509,7 +538,7 @@ def visit_shop(character):
             potion_name = "Health Potion"
 
             if character['Gold'] < potion_cost:
-                print("Not enough gold to buy the health potion.")
+                print("\"Not enough gold to buy the health potion.\"")
             else:
                 print(f"You bought a {potion_name}!")
                 character['Gold'] -= potion_cost
@@ -574,7 +603,7 @@ def combat_loop(character, foe):
     :postcondition: conducts the combat loop until either the character or the foe is defeated
     :return: returns True if the character wins, otherwise False
 
-    # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack': 1, 'Armor': 0},
+    # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack': 1, 'Armour': 0},
     # ... {'Name': 'Goblin', 'Attack': 2, 'Current HP': 10},
     # ... {(0, 0): "Starting Room", (1, 0): "Empty Room"})
     # True
@@ -685,6 +714,14 @@ def combat_loop(character, foe):
         if special_item:
             print(f"You obtained a special item: {special_item}!")
             add_inventory(character, special_item, 0, 1, "Special")
+        # Check for equipment item in foe's inventory
+        equipment_item = foe.get('Equipment Item')
+        if equipment_item == "Radiant Blade":
+            print(f"You obtained a special item: {equipment_item}!")
+            add_equipment(character, equipment_item, 5, "Weapon")
+        elif equipment_item == "Guardian Armour":
+            print(f"You obtained a special item: {equipment_item}!")
+            add_equipment(character, equipment_item, 3, "Armour")
 
         return True, character
 
@@ -795,8 +832,8 @@ def game():  # called from main
                     level_up(character)
 
             elif (board.get(player_location) == "Final Room"
-                  and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())
-                  and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())):
+                  and any(item['Name'] == "Radiant Blade" for item in character['Inventory'].values())
+                  and any(item['Name'] == "Guardian Armour" for item in character['Inventory'].values())):
                 special_foe = generate_special_foe(board, character)
                 print(f"You are facing {special_foe['Name']}!")
 
