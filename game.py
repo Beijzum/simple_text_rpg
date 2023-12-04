@@ -790,6 +790,15 @@ def use_item(character, item_key):
             print(f"You used a {selected_item['Name']} and healed {healing_amount} health!")
             return True
 
+        elif "AP Potion" in selected_item["Name"]:
+            # Will add the lowest amount to character AP. If character is already at max AP, nothing will be added.
+            ap_amount = min(selected_item["Power"], character['Max AP'] - character['Ability Points'])
+            character['Ability Points'] += ap_amount
+            selected_item['Quantity'] -= 1
+
+            print(f"You used a {selected_item['Name']} and restored {ap_amount} AP!")
+            return True
+
         print(f"You can't use {selected_item['Name']} in combat.")
         return False
 
