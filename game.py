@@ -27,10 +27,17 @@ def make_board(rows, columns):
                 board[(row, column)] = "Starting Room"
 
             elif (row, column) == (rows - 1, columns - 1):
-                board[(row, column)] = "Chocolate Room"
+                board[(row, column)] = "Final Room"
+
+            elif (row, column) == (rows - 1, 0):
+                board[(row, column)] = "Inferno Lair"
+
+            elif (row, column) == (0, columns - 1):
+                board[(row, column)] = "Winter Sanctum"
 
             elif (row, column) == (2, 2):
                 board[(row, column)] = "Traveling Merchant"
+
             else:
                 room = random.choice(room_list)
                 board[(row, column)] = room
@@ -168,6 +175,10 @@ def describe_current_location(board, character):
         print("You see nothing interesting in this room.")
     elif board[player_location] == "Dark Room":
         print("You see nothing but darkness in this room.")
+    elif board[player_location] == "Inferno Lair":
+        print("You sense the warmth emanating from the scorching depths of molten rage and foreboding radiance.")
+    elif board[player_location] == "Winter Sanctum":
+        print("You feel the frigid embrace of winter, adorned with shimmering ice formations.")
 
 
 def get_user_choice(rows, columns, character):
@@ -209,10 +220,10 @@ def get_user_choice(rows, columns, character):
             show_map(rows, columns, character)
 
         elif user_input == "6":
-            get_character_inventory(character)
+            get_character_stats(character)
 
         elif user_input == "7":
-            get_character_stats(character)
+            get_character_inventory(character)
 
         else:
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
@@ -371,15 +382,15 @@ def check_location(board, character):
     :precondition: board must be a dictionary with x, y coordinates as a key, and a room name as a value
     :precondition: character must be a dictionary with x, y coordinates, and HP counter
     :precondition: character must be alive with greater than 0 HP
-    :postcondition: checks if the user has reached the 'Chocolate Room'
-    :return: returns True if player character is located at the 'Chocolate Room', otherwise False
+    :postcondition: checks if the user has reached the 'Final Room'
+    :return: returns True if player character is located at the 'Final Room', otherwise False
 
-    >>> board_test = {(0, 0): "Starting Room", (2, 2): "Chocolate Room"}
+    >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
     >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5}
     >>> check_location(board_test, character_test)
     False
 
-    >>> board_test = {(0, 0): "Starting Room", (2, 2): "Chocolate Room"}
+    >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
     >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Current HP": 5}
     >>> check_location(board_test, character_test)
     True
@@ -388,7 +399,7 @@ def check_location(board, character):
     y = character["Y-coordinate"]
     coordinate = (x, y)
 
-    if board.get(coordinate) == "Chocolate Room":
+    if board.get(coordinate) == "Final Room":
         return True
     elif board.get(coordinate) == "Traveling Merchant":
         visit_shop(character)
@@ -703,7 +714,7 @@ def game():  # called from main
             break
 
         elif is_alive(character) and achieved_goal:
-            print(f"You have arrived at the Chocolate Room!")
+            print(f"You have arrived at the Final Room!")
             print("Congratulations, you win a life-time supply of your favourite chocolate!")
             break
 
