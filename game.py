@@ -338,8 +338,8 @@ def generate_foe():
     if random_foe == "Goblin":
         return {
             "Name": "Goblin",
-            "Attack": random.randint(1, 2),
-            "Current HP": random.randint(3, 4),
+            "Attack": 1,
+            "Current HP": 3,
             "Defence": 0,
             "Gold": 10,
             "Experience Points": 5,
@@ -347,17 +347,17 @@ def generate_foe():
     elif random_foe == "Orc":
         return {
             "Name": "Orc",
-            "Attack": random.randint(2, 4),
-            "Current HP": random.randint(4, 6),
+            "Attack": 2,
+            "Current HP": 6,
             "Defence": 1,
             "Gold": 25,
-            "Experience Points": 15,
+            "Experience Points": 20,
         }
     elif random_foe == "Skeleton":
         return {
             "Name": "Skeleton",
-            "Attack": random.randint(2, 3),
-            "Current HP": random.randint(2, 4),
+            "Attack": 2,
+            "Current HP": 3,
             "Defence": 1,
             "Gold": 15,
             "Experience Points": 10,
@@ -365,11 +365,49 @@ def generate_foe():
     elif random_foe == "Ghoul":
         return {
             "Name": "Ghoul",
-            "Attack": random.randint(1, 2),
-            "Current HP": random.randint(6, 8),
+            "Attack": 1,
+            "Current HP": 8,
             "Defence": 0,
             "Gold": 15,
-            "Experience Points": 10,
+            "Experience Points": 15,
+        }
+
+
+def generate_special_foe(board, character):
+    x = character["X-coordinate"]
+    y = character["Y-coordinate"]
+    coordinate = (x, y)
+
+    if board.get(coordinate) == "Winter Sanctum":
+        return {
+            "Name": "Winter Monster",
+            "Attack": 5,
+            "Current HP": 30,
+            "Defence": 2,
+            "Ability": "Freeze",
+            "Gold": 50,
+            "Experience Points": 50,
+
+        }
+    elif board.get(coordinate) == "Inferno Lair":
+        return {
+            "Name": "Lava Monster",
+            "Attack": 8,
+            "Current HP": 50,
+            "Defence": 3,
+            "Ability": "Burn",
+            "Gold": 100,
+            "Experience Points": 50,
+            "Special Item": "Radiant Sword",
+        }
+    elif board.get(coordinate) == "Final Room":
+        return {
+            "Name": "Final Boss",
+            "Attack": 12,
+            "Current HP": 75,
+            "Defence": 4,
+            "Gold": 1000,
+            "Experience Points": 1000,
         }
 
 
@@ -540,7 +578,8 @@ def combat_loop(character, foe):
 
             # Foe counterattacks
             if is_alive(foe):
-                damage_taken = max(0, foe['Attack'] - character['Defence'])
+                foe_attack = foe['Attack'] + random.randint(-1, 1)
+                damage_taken = max(0, foe_attack - character['Defence'])
                 character['Current HP'] -= damage_taken
                 print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
@@ -562,7 +601,8 @@ def combat_loop(character, foe):
                     raise ValueError("Invalid skill choice")
 
                 if is_alive(foe):
-                    damage_taken = max(0, foe['Attack'] - character['Defence'])
+                    foe_attack = foe['Attack'] + random.randint(-1, 1)
+                    damage_taken = max(0, foe_attack - character['Defence'])
                     character['Current HP'] -= damage_taken
                     print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
@@ -688,21 +728,36 @@ def game():  # called from main
 
         if valid_move:
             move_character(character, direction)
-            there_is_a_challenger = check_for_foes()
-            if there_is_a_challenger:
-                # Generate a foe
-                foe = generate_foe()
-                print(f"You are facing a {foe['Name']}!")
+            player_location = (character["X-coordinate"], character["Y-coordinate"])
 
-                # Combat loop
-                combat_result = combat_loop(character, foe)
+            if board.get(player_location) in ["Winter Sanctum", "Inferno Lair", "Final Room"]:
+                special_foe = generate_special_foe(board, character)
+                print(f"You are facing {special_foe['Name']}!")
+
+                combat_result = combat_loop(character, special_foe)
 
                 if not combat_result:
-                    break  # Player ran away from combat
+                    break
 
-                # Check for level up
                 if character['Experience Points'] >= character['EXP to Level Up']:
                     level_up(character)
+
+            else:
+                there_is_a_challenger = check_for_foes()
+                if there_is_a_challenger:
+                    # Generate a foe
+                    foe = generate_foe()
+                    print(f"You are facing a {foe['Name']}!")
+
+                    # Combat loop
+                    combat_result = combat_loop(character, foe)
+
+                    if not combat_result:
+                        break  # Player ran away from combat
+
+                    # Check for level up
+                    if character['Experience Points'] >= character['EXP to Level Up']:
+                        level_up(character)
 
             achieved_goal = check_location(board, character)
 
