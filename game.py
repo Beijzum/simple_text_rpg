@@ -80,7 +80,6 @@ def get_character_stats(character):
 def level_up(character):
     """
     """
-
     character["Max HP"] += 5
     character["Current HP"] = character["Max HP"]
     character["Attack Power"] += 1
@@ -89,6 +88,9 @@ def level_up(character):
     character['Experience Points'] -= character['EXP to Level Up']
     character['EXP to Level Up'] = int(character['EXP to Level Up'] * 1.5)
     print(f"Congratulations! You leveled up to Level {character['Level']}!")
+    print(f"Your Max HP is now {character['Max HP']}.")
+    print(f"Your Attack Power is now {character['Attack Power']}.")
+    print(f"Your Defence is now {character['Defence']}.")
 
     return character
 
@@ -142,7 +144,7 @@ def get_user_choice(character):
         print("2. Down")
         print("3. Left")
         print("4. Right")
-        user_input = input("Please choose a direction (1, 2, 3, or 4) or get stats(5): ")
+        user_input = input("Please choose a direction (1, 2, 3, or 4) or get character status(5): ")
 
         if user_input == "1":
             print("You chose to go up...")
@@ -274,7 +276,7 @@ def generate_foe():
     Generate a foe with random attributes.
 
     :param: N/A
-    :precondition: N/A
+    :precondition: character must be alive with greater than 0 HP
     :postcondition: creates a foe dictionary with random attributes
     :return: a dictionary representing the foe with attributes like 'Attack Power' and 'HP'
 
@@ -452,7 +454,7 @@ def is_alive(character):
     >>> is_alive(character_test)
     False
     """
-    return True if character['Current HP'] != 0 else False
+    return True if character['Current HP'] >= 0 else False
 
 
 def game():  # called from main
@@ -467,7 +469,7 @@ def game():  # called from main
     achieved_goal = False
     print(f"Your current HP is {character['Current HP']}.")
 
-    while is_alive and not achieved_goal:
+    while not achieved_goal:
         # Tell the user where they are
         describe_current_location(board, character)
         direction = get_user_choice(character)
