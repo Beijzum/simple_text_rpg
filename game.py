@@ -576,14 +576,12 @@ def use_item(character, item_key):
             return False
 
         if "Health Potion" in selected_item["Name"]:
-            healing_amount = selected_item["Power"]
-            # Check if the character is already at max HP
-            remaining_health = min(healing_amount, character['Max HP'] - character['Current HP'])
             # Will add the lowest amount to character health. If character is already at max HP, nothing will be added.
-            character['Current HP'] += remaining_health
+            healing_amount = min(selected_item["Power"], character['Max HP'] - character['Current HP'])
+            character['Current HP'] += healing_amount
             selected_item['Quantity'] -= 1
 
-            print(f"You used a {selected_item['Name']} and healed {remaining_health} health!")
+            print(f"You used a {selected_item['Name']} and healed {healing_amount} health!")
             return True
 
         print(f"You can't use {selected_item['Name']} in combat.")
