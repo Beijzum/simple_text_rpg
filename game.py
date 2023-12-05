@@ -160,25 +160,25 @@ def level_up(character):
 
 def learn_ability(character):
     if character['Level'] == 3:
-        ability_count = len(character['Ability']) + 1
+        ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "Multi-Strike", "Power": 4, "AP Cost": 2}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     elif character['Level'] == 5:
-        ability_count = len(character['Ability']) + 1
+        ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "Holy Strike", "Power": 7, "AP Cost": 3}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     elif character['Level'] == 7:
-        ability_count = len(character['Ability']) + 1
+        ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "Ultimate Strike", "Power": 10, "AP Cost": 5}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     elif character['Level'] == 10:
-        ability_count = len(character['Ability']) + 1
+        ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "You're Playing Too Long", "Power": 999, "AP Cost": 10}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
@@ -527,7 +527,7 @@ def visit_shop(character):
     while True:
         print("1. Buy Weapon")
         print("2. Buy Armour")
-        print("3. Buy Health Potion")
+        print("3. Buy Potions")
         print("4. Leave Shop")
         print(f"You currently have {character['Gold']} gold.")
         choice = input("Choose an option (1, 2, 3, or 4): ")
