@@ -432,10 +432,12 @@ def generate_special_foe(board, character):
     if board.get(coordinate) == "Winter Sanctum":
         return {
             "Name": "Abominable Snowman",
-            "Attack": 5,
+            "Attack": 4,
             "Current HP": 30,
             "Defence": 2,
-            "Ability": "Freeze",
+            "Ability": {
+                "Snowball": {"Power": 4, "Description": "The Abominable Snowman throws a giant snowball at you!"},
+            },
             "Gold": 50,
             "Experience Points": 50,
             "Special Item": "Frozen Orb",
@@ -444,10 +446,12 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Inferno Lair":
         return {
             "Name": "Dragon",
-            "Attack": 8,
+            "Attack": 4,
             "Current HP": 50,
             "Defence": 3,
-            "Ability": "Burn",
+            "Ability": {
+                "Flame Breath": {"Power": 4, "Description": "The Dragon unleashes a fiery breath!"},
+            },
             "Gold": 100,
             "Experience Points": 50,
             "Special Item": "Flame Orb",
@@ -455,10 +459,12 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Ice Guardian Room":
         return {
             "Name": "Ice Guardian",
-            "Attack": 10,
+            "Attack": 6,
             "Current HP": 70,
             "Defence": 4,
-            "Ability": "Frost Strike",
+            "Ability": {
+                "Snowstorm": {"Power": 6, "Description": "The Ice Guardian is creating a snowstorm!"}
+            },
             "Gold": 100,
             "Experience Points": 50,
             "Equipment Item": "Guardian Armour",
@@ -466,20 +472,25 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Fire Guardian Room":
         return {
             "Name": "Fire Guardian",
-            "Attack": 10,
+            "Attack": 6,
             "Current HP": 70,
             "Defence": 4,
-            "Ability": "Flame Strike",
+            "Ability": {
+                "Infernal Blaze": {"Power": 6, "Description": "The Fire Guardian conjures fiery devastation!"}
+            },
             "Gold": 100,
             "Experience Points": 50,
             "Equipment Item": "Radiant Blade",
         }
     elif board.get(coordinate) == "Final Room":
         return {
-            "Name": "Final Boss",
-            "Attack": 12,
+            "Name": "Brain Devourer",
+            "Attack": 8,
             "Current HP": 75,
-            "Defence": 4,
+            "Defence": 5,
+            "Ability": {
+                "Ethereal Blast": {"Power": 8, "Description": "A mystic force surges through the fabric of reality!"}
+            },
             "Gold": 1000,
             "Experience Points": 1000,
             "Special Item": "Chocolate Orb",
@@ -712,10 +723,7 @@ def combat_loop(character, foe):
 
             # Foe counterattacks
             if is_alive(foe):
-                foe_attack = foe['Attack'] + random.randint(-1, 1)
-                damage_taken = max(0, foe_attack - character['Defence'])
-                character['Current HP'] -= damage_taken
-                print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
+                enemy_attack(character, foe)
 
         elif action == "2":
             try:
@@ -743,10 +751,7 @@ def combat_loop(character, foe):
                     raise ValueError("Invalid skill choice")
 
                 if is_alive(foe):
-                    foe_attack = foe['Attack'] + random.randint(-1, 1)
-                    damage_taken = max(0, foe_attack - character['Defence'])
-                    character['Current HP'] -= damage_taken
-                    print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
+                    enemy_attack(character, foe)
 
             except ValueError:
                 print("Please enter a valid skill number.")
@@ -800,6 +805,26 @@ def combat_loop(character, foe):
         battle_rewards(character, foe)
 
         return True, character
+
+
+def enemy_attack(character, foe):
+    foe_skill_use = random.random() < 0.25
+    if foe_skill_use and 'Ability' in foe:
+        foe_ability_name = next(iter(foe['Ability']))
+        foe_ability = foe['Ability'][foe_ability_name]
+        ability_power = foe_ability.get('Power')
+        foe_attack = foe['Attack'] + random.randint(-1, 1)
+
+        total_damage = max(0, foe_attack + ability_power - character['Defence'])
+        print(f"{foe_ability.get('Description')}")
+        print(f"The {foe['Name']} uses {foe_ability_name} and deals {total_damage} damage!")
+        character['Current HP'] -= ability_power
+
+    else:
+        foe_attack = foe['Attack'] + random.randint(-1, 1)
+        damage_taken = max(0, foe_attack - character['Defence'])
+        character['Current HP'] -= damage_taken
+        print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
 
 
 def battle_rewards(character, foe):
