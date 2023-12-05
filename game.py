@@ -609,26 +609,24 @@ def visit_shop(character):
             if potion_choice == "1":
                 potion_cost = 5
                 potion_name = "Health Potion"
+                potion_power = 10
 
             elif potion_choice == "2":
                 potion_cost = 10
                 potion_name = "AP Potion"
+                potion_power = 5
 
             else:
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < potion_cost:
-                print("\"Not enough gold to buy the potion.\"")
+                print("Not enough gold to buy the potion.")
 
             else:
                 print(f"You bought a {potion_name}!")
-                if potion_name == "Health Potion":
-                    character['Gold'] -= potion_cost
-                    add_inventory(character, potion_name, 10, 1, "Consumable")
-                elif potion_name == "AP Potion":
-                    character['Gold'] -= potion_cost
-                    add_inventory(character, potion_name, 5, 1, "Consumable")
+                character['Gold'] -= potion_cost
+                add_inventory(character, potion_name, potion_power, 1, "Consumable")
 
         elif choice == "4":
             print(f"\"Thanks for visiting the Shop! Come again.\"")
@@ -723,7 +721,8 @@ def combat_loop(character, foe):
             try:
                 print("Choose an ability: ")
                 for key, value in character['Abilities'].items():
-                    print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)}")
+                    print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)} |"
+                          f" AP Cost: {value.get('AP Cost', 0)}")
 
                 skill_choice = int(input("Enter the number of the skill you want to use: "))
 
@@ -809,11 +808,13 @@ def battle_rewards(character, foe):
     print(f"You gained {foe['Experience Points']} experience points!")
     character['Gold'] += foe['Gold']
     print(f"Your total gold is now {character['Gold']}.")
+
     # Check for special item in foe's inventory
     special_item = foe.get('Special Item')
     if special_item:
         print(f"You obtained a special item: {special_item}!")
         add_inventory(character, special_item, 0, 1, "Special")
+
     # Check for equipment item in foe's inventory
     equipment_item = foe.get('Equipment Item')
     if equipment_item == "Radiant Blade":
