@@ -814,10 +814,10 @@ def battle_rewards(character, foe):
     equipment_item = foe.get('Equipment Item')
     if equipment_item == "Radiant Blade":
         print(f"You obtained a special item: {equipment_item}!")
-        add_equipment(character, equipment_item, 5, "Weapon")
+        add_equipment(character, equipment_item, 8, "Weapon")
     elif equipment_item == "Guardian Armour":
         print(f"You obtained a special item: {equipment_item}!")
-        add_equipment(character, equipment_item, 3, "Armour")
+        add_equipment(character, equipment_item, 5, "Armour")
 
 
 def use_item(character, item_key):
