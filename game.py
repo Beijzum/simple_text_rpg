@@ -808,23 +808,22 @@ def combat_loop(character, foe):
 
 
 def enemy_attack(character, foe):
-    foe_skill_use = random.random() < 0.25
-    if foe_skill_use and 'Ability' in foe:
+    if random.random() < 0.25 and 'Ability' in foe:
         foe_ability_name = next(iter(foe['Ability']))
         foe_ability = foe['Ability'][foe_ability_name]
         ability_power = foe_ability.get('Power')
         foe_attack = foe['Attack'] + random.randint(-1, 1)
 
         total_damage = max(0, foe_attack + ability_power - character['Defence'])
+        character['Current HP'] -= total_damage
         print(f"{foe_ability.get('Description')}")
         print(f"The {foe['Name']} uses {foe_ability_name} and deals {total_damage} damage!")
-        character['Current HP'] -= ability_power
 
     else:
         foe_attack = foe['Attack'] + random.randint(-1, 1)
-        damage_taken = max(0, foe_attack - character['Defence'])
-        character['Current HP'] -= damage_taken
-        print(f"The {foe['Name']} counterattacks and deals {damage_taken} damage!")
+        total_damage = max(0, foe_attack - character['Defence'])
+        character['Current HP'] -= total_damage
+        print(f"The {foe['Name']} counterattacks and deals {total_damage} damage!")
 
 
 def battle_rewards(character, foe):
