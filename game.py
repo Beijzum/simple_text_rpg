@@ -533,21 +533,39 @@ def visit_shop(character):
         choice = input("Choose an option (1, 2, 3, or 4): ")
 
         if choice == "1":
-            weapon_cost = 10
-            weapon_name = "Iron Sword"
+            print(f"1. Iron Sword $10\n2. Steel Sword $30")
+            weapon_choice = input("Enter the number of the weapon you want to buy: ")
+
+            if weapon_choice == "1":
+                weapon_cost = 10
+                weapon_name = "Iron Sword"
+
+            elif weapon_choice == "2":
+                weapon_cost = 30
+                weapon_name = "Steel Sword"
+
+            else:
+                print("Invalid choice. Please enter a valid option.")
+                continue
 
             if character['Gold'] < weapon_cost:
                 print("Not enough gold to buy the weapon.")
+
             elif "Radiant Blade" in [item['Name'] for item in character['Inventory'].values()]:
-                print(f"\"You already have a powerful weapon!\"")
+                print("\"You already have a powerful weapon!\"")
                 continue
+
             elif any(item.get('Name') == weapon_name for item in character['Inventory'].values()):
-                print(f"\"You already have {weapon_name} in your inventory.\"")
+                print(f"You already have {weapon_name} in your inventory.")
                 continue
+
             else:
                 print(f"You bought {weapon_name}!")
                 character['Gold'] -= weapon_cost
-                add_equipment(character, weapon_name, 2, "Weapon")
+                if weapon_name == "Iron Sword":
+                    add_equipment(character, weapon_name, 2, "Weapon")
+                elif weapon_name == "Steel Sword":
+                    add_equipment(character, weapon_name, 4, "Weapon")
 
         elif choice == "2":
             print(f"1. Leather Armour $10\n2. Iron Armour $30")
