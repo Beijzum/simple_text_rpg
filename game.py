@@ -563,7 +563,7 @@ def visit_shop(character):
 
             else:
                 print("Invalid choice. Please enter a valid option.")
-                return
+                continue
 
             if character['Gold'] < armour_cost:
                 print("Not enough gold to buy the armour.")
@@ -599,7 +599,7 @@ def visit_shop(character):
 
             else:
                 print("Invalid choice. Please enter a valid option.")
-                return
+                continue
 
             if character['Gold'] < potion_cost:
                 print("\"Not enough gold to buy the potion.\"")
