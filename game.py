@@ -150,6 +150,7 @@ def level_up(character):
     character['EXP to Level Up'] = int(character['EXP to Level Up'] * 1.5)
     print(f"Congratulations! You leveled up to Level {character['Level']}!")
     print(f"Your Max HP is now {character['Max HP']}.")
+    print(f"Your Max AP is now {character['Max AP']}.")
     print(f"Your Attack is now {character['Attack']}.")
     print(f"Your Defence is now {character['Defence']}.")
 
@@ -548,7 +549,7 @@ def visit_shop(character):
             weapon_choice = input("Enter the number of the weapon you want to buy: ")
 
             if weapon_choice == "1":
-                weapon_cost = 10
+                weapon_cost = 15
                 weapon_name = "Iron Sword"
                 weapon_power = 2
 
@@ -583,7 +584,7 @@ def visit_shop(character):
             armour_choice = input("Enter the number of the armour you want to buy: ")
 
             if armour_choice == "1":
-                armour_cost = 10
+                armour_cost = 15
                 armour_name = "Leather Armour"
                 armour_power = 1
 
@@ -618,14 +619,14 @@ def visit_shop(character):
             potion_choice = input("Enter the number of the potion you want to buy: ")
 
             if potion_choice == "1":
-                potion_cost = 5
+                potion_cost = 10
                 potion_name = "Health Potion"
-                potion_power = 10
+                potion_power = 15
 
             elif potion_choice == "2":
                 potion_cost = 10
                 potion_name = "AP Potion"
-                potion_power = 5
+                potion_power = 10
 
             else:
                 print("Invalid choice. Please enter a valid option.")
