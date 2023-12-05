@@ -165,19 +165,19 @@ def learn_ability(character):
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
-    if character['Level'] == 5:
+    elif character['Level'] == 5:
         ability_count = len(character['Ability']) + 1
         new_ability = {"Name": "Holy Strike", "Power": 7, "AP Cost": 3}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
-    if character['Level'] == 7:
+    elif character['Level'] == 7:
         ability_count = len(character['Ability']) + 1
         new_ability = {"Name": "Ultimate Strike", "Power": 10, "AP Cost": 5}
         character['Abilities'][ability_count] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
-    if character['Level'] == 10:
+    elif character['Level'] == 10:
         ability_count = len(character['Ability']) + 1
         new_ability = {"Name": "You're Playing Too Long", "Power": 999, "AP Cost": 10}
         character['Abilities'][ability_count] = new_ability
@@ -532,17 +532,19 @@ def visit_shop(character):
         print(f"You currently have {character['Gold']} gold.")
         choice = input("Choose an option (1, 2, 3, or 4): ")
 
-        if choice == "1":
+        if choice == "1":  # Buying a weapon
             print(f"1. Iron Sword $10\n2. Steel Sword $30")
             weapon_choice = input("Enter the number of the weapon you want to buy: ")
 
             if weapon_choice == "1":
                 weapon_cost = 10
                 weapon_name = "Iron Sword"
+                weapon_power = 2
 
             elif weapon_choice == "2":
                 weapon_cost = 30
                 weapon_name = "Steel Sword"
+                weapon_power = 4
 
             else:
                 print("Invalid choice. Please enter a valid option.")
@@ -551,33 +553,33 @@ def visit_shop(character):
             if character['Gold'] < weapon_cost:
                 print("Not enough gold to buy the weapon.")
 
-            elif "Radiant Blade" in [item['Name'] for item in character['Inventory'].values()]:
-                print("\"You already have a powerful weapon!\"")
-                continue
-
             elif any(item.get('Name') == weapon_name for item in character['Inventory'].values()):
                 print(f"You already have {weapon_name} in your inventory.")
+                continue
+
+            elif any(value['Power'] >= weapon_power for value in character['Inventory'].values() if
+                     value['Type'] == 'Weapon'):
+                print("\"You already have a powerful weapon!\"")
                 continue
 
             else:
                 print(f"You bought {weapon_name}!")
                 character['Gold'] -= weapon_cost
-                if weapon_name == "Iron Sword":
-                    add_equipment(character, weapon_name, 2, "Weapon")
-                elif weapon_name == "Steel Sword":
-                    add_equipment(character, weapon_name, 4, "Weapon")
+                add_equipment(character, weapon_name, weapon_power, "Weapon")
 
-        elif choice == "2":
+        elif choice == "2":  # Buying armour
             print(f"1. Leather Armour $10\n2. Iron Armour $30")
             armour_choice = input("Enter the number of the armour you want to buy: ")
 
             if armour_choice == "1":
                 armour_cost = 10
                 armour_name = "Leather Armour"
+                armour_power = 1
 
             elif armour_choice == "2":
                 armour_cost = 30
                 armour_name = "Iron Armour"
+                armour_power = 2
 
             else:
                 print("Invalid choice. Please enter a valid option.")
@@ -586,22 +588,19 @@ def visit_shop(character):
             if character['Gold'] < armour_cost:
                 print("Not enough gold to buy the armour.")
 
-            elif "Guardian Armour" in [item['Name'] for item in character['Inventory'].values()]:
-                print(f"\"You already have a magnificent suit of armour!\"")
-                continue
-
             elif any(item.get('Name') == armour_name for item in character['Inventory'].values()):
                 print(f"You already have {armour_name} in your inventory.")
                 continue
 
+            elif any(value['Power'] >= armour_power for value in character['Inventory'].values() if
+                     value['Type'] == 'Armour'):
+                print("\"You already have a magnificent suit of armour!\"")
+                continue
+
             else:
                 print(f"You bought {armour_name}!")
-                if armour_name == "Leather Armour":
-                    character['Gold'] -= armour_cost
-                    add_equipment(character, armour_name, 1, "Armour")
-                elif armour_name == "Iron Armour":
-                    character['Gold'] -= armour_cost
-                    add_equipment(character, armour_name, 2, "Armour")
+                character['Gold'] -= armour_cost
+                add_equipment(character, armour_name, armour_power, "Armour")
 
         elif choice == "3":
             print("1. Health Potion $5\n2. AP Potion $10")
