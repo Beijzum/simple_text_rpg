@@ -730,8 +730,13 @@ def combat_loop(character, foe):
 
                 if skill_choice in character['Abilities']:
                     ability = character['Abilities'][skill_choice]
-                    ability_cost = ability['AP Cost']
-                    damage_dealt = max(0, character['Attack'] + ability['Power'] - foe['Defence'])
+                    ability_cost = ability.get('AP Cost', 0)
+
+                    if character['Ability Points'] < ability_cost:
+                        print("Insufficient Ability Points to use this skill.")
+                        continue
+
+                    damage_dealt = max(0, character['Attack'] + ability.get('Power', 0) - foe['Defence'])
                     foe['Current HP'] -= damage_dealt
                     print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
                     character['Ability Points'] -= ability_cost
