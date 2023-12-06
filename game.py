@@ -541,11 +541,16 @@ def generate_special_foe(board, character):
         return {
             "Name": "Brain Devourer",
             "Attack": 10,
+            "Max HP": 80,
             "Current HP": 80,
             "Defence": 5,
             "Ability": {
                 "Ethereal Blast": {"Power": 8, "Description": "A mystic force surges through the fabric of reality!"}
             },
+            "Special Ability": {
+                "Supernova": {"Power": 25, "Description": "The Brain Devourer is channeling cosmic energy!"},
+            },
+            "Special Ability Counter": 0,
             "Gold": 1000,
             "Experience Points": 1000,
             "Special Item": "Chocolate Orb",
@@ -863,7 +868,25 @@ def combat_loop(character, foe):
 
 
 def enemy_attack(character, foe):
-    if random.random() < 0.25 and 'Ability' in foe:
+    """
+    """
+    # If the foe has a special ability and is below half health
+    if 'Special Ability' in foe and foe['Current HP'] < foe['Max HP'] / 2 and foe['Special Ability Counter'] == 0:
+        foe_special_ability_name = next(iter(foe['Special Ability']))
+        foe_special_ability = foe['Special Ability'][foe_special_ability_name]
+        ability_power = foe_special_ability.get('Power')
+        foe_attack = foe['Attack'] + random.randint(-1, 1)
+
+        total_damage = max(0, foe_attack + ability_power - character['Defence'])
+        character['Current HP'] -= total_damage
+        foe['Special Ability Counter'] += 1
+        print(f"{foe_special_ability.get('Description')}")
+        print(f"Your Radiant Blade and Guardian Armour are reacting to the {foe['Name']}'s special ability!")
+        print(f"Your special items mitigate {foe_special_ability_name} and it only deals {total_damage} damage!")
+        print(f"You sense that the creature is weakening.")
+
+    # 25% to use ability
+    elif random.random() < 0.25 and 'Ability' in foe:
         foe_ability_name = next(iter(foe['Ability']))
         foe_ability = foe['Ability'][foe_ability_name]
         ability_power = foe_ability.get('Power')
