@@ -1006,8 +1006,7 @@ def game(character=None):
         describe_current_location(board, character)
 
     achieved_goal = False
-    game_active = [True]
-    while not achieved_goal and game_active:
+    while not achieved_goal:
 
         direction = get_user_choice(rows, columns, character)
         valid_move = validate_move(board, character, direction)
