@@ -5,6 +5,14 @@ A00942129
 import random
 import json
 import sys
+import os
+
+
+def clear():
+    """
+    Clear the terminal screen using ANSI escape codes.
+    """
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def start_menu():
@@ -20,15 +28,16 @@ def start_menu():
         choice = input("Enter your choice (1, 2, or 3): ")
 
         if choice == "1":
+            clear()
             game()
             break
         elif choice == "2":
+            clear()
             load_game()
             break
         elif choice == "3":
             print("Goodbye! Thanks for playing.")
             sys.exit(0)
-            break
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")
 
@@ -322,18 +331,23 @@ def get_user_choice(rows, columns, character):
             return "right"
 
         elif user_input == "5":
+            clear()
             show_map(rows, columns, character)
 
         elif user_input == "6":
+            clear()
             get_character_stats(character)
 
         elif user_input == "7":
+            clear()
             get_character_inventory(character)
 
         elif user_input == "8":
+            clear()
             save_game(character)
 
         elif user_input == "0":
+            clear()
             start_menu()
 
         else:
@@ -609,6 +623,7 @@ def visit_shop(character):
         choice = input("Choose an option (1, 2, 3, or 4): ")
 
         if choice == "1":  # Buying a weapon
+            clear()
             print(f"1. Iron Sword $10\n2. Steel Sword $30")
             weapon_choice = input("Enter the number of the weapon you want to buy: ")
 
@@ -623,27 +638,33 @@ def visit_shop(character):
                 weapon_power = 4
 
             else:
+                clear()
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < weapon_cost:
+                clear()
                 print("Not enough gold to buy the weapon.")
 
             elif any(item.get('Name') == weapon_name for item in character['Inventory'].values()):
+                clear()
                 print(f"You already have {weapon_name} in your inventory.")
                 continue
 
             elif any(value['Power'] >= weapon_power for value in character['Inventory'].values() if
                      value['Type'] == 'Weapon'):
+                clear()
                 print("\"You already have a powerful weapon!\"")
                 continue
 
             else:
+                clear()
                 print(f"You bought {weapon_name}!")
                 character['Gold'] -= weapon_cost
                 add_equipment(character, weapon_name, weapon_power, "Weapon")
 
         elif choice == "2":  # Buying armour
+            clear()
             print(f"1. Leather Armour $10\n2. Iron Armour $30")
             armour_choice = input("Enter the number of the armour you want to buy: ")
 
@@ -658,27 +679,33 @@ def visit_shop(character):
                 armour_power = 2
 
             else:
+                clear()
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < armour_cost:
+                clear()
                 print("Not enough gold to buy the armour.")
 
             elif any(item.get('Name') == armour_name for item in character['Inventory'].values()):
+                clear()
                 print(f"You already have {armour_name} in your inventory.")
                 continue
 
             elif any(value['Power'] >= armour_power for value in character['Inventory'].values() if
                      value['Type'] == 'Armour'):
+                clear()
                 print("\"You already have a magnificent suit of armour!\"")
                 continue
 
             else:
+                clear()
                 print(f"You bought {armour_name}!")
                 character['Gold'] -= armour_cost
                 add_equipment(character, armour_name, armour_power, "Armour")
 
         elif choice == "3":
+            clear()
             print("1. Health Potion $5\n2. AP Potion $10")
             potion_choice = input("Enter the number of the potion you want to buy: ")
 
@@ -693,22 +720,27 @@ def visit_shop(character):
                 potion_power = 10
 
             else:
+                clear()
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < potion_cost:
+                clear()
                 print("Not enough gold to buy the potion.")
 
             else:
+                clear()
                 print(f"You bought a {potion_name}!")
                 character['Gold'] -= potion_cost
                 add_inventory(character, potion_name, potion_power, 1, "Consumable")
 
         elif choice == "4":
+            clear()
             print(f"\"Thanks for visiting the Shop! Come again.\"")
             break
 
         else:
+            clear()
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
 
     return character
@@ -770,6 +802,7 @@ def combat_loop(character, foe):
     Dunno how to test yet. @patch?
     """
     while is_alive(character) and is_alive(foe):
+
         print(f"Your HP: {character['Current HP']}")
         print(f"Your AP: {character['Ability Points']}")
         print("Options:")
@@ -782,6 +815,7 @@ def combat_loop(character, foe):
         action = input("Choose an option (1, 2, 3, or 4): ")
 
         if action == "1":
+            clear()
             damage_dealt = max(0, character['Attack'] - foe['Defence'])
             foe['Current HP'] -= damage_dealt
             print(f"You dealt {damage_dealt} damage to the {foe['Name']}!")
@@ -791,6 +825,7 @@ def combat_loop(character, foe):
                 enemy_attack(character, foe)
 
         elif action == "2":
+            clear()
             try:
                 print("Choose an ability: ")
                 for key, value in character['Abilities'].items():
@@ -800,6 +835,7 @@ def combat_loop(character, foe):
                 skill_choice = input("Enter the number of the skill you want to use: ")
 
                 if skill_choice in character['Abilities']:
+                    clear()
                     ability = character['Abilities'][skill_choice]
                     ability_cost = ability.get('AP Cost', 0)
 
@@ -823,6 +859,7 @@ def combat_loop(character, foe):
                 continue
 
         elif action == "3":
+            clear()
             try:
                 # Check if there are any consumables in the inventory
                 consumables_exist = any(item.get('Type') == "Consumable" for item in character['Inventory'].values())
@@ -850,12 +887,14 @@ def combat_loop(character, foe):
                 print("Invalid input. Please enter a valid item number.")
 
         elif action == "4":
+            clear()
             print(f"{foe['Name']}'s HP: {foe['Current HP']}")
             print(f"{foe['Name']}'s Attack: {foe['Attack']}")
             print(f"{foe['Name']}'s Defence: {foe['Defence']}")
             continue
 
         elif action == "5":
+            clear()
             # Player chooses to run away
             print("You run away from the battle.")
             return False, character
@@ -877,6 +916,7 @@ def enemy_attack(character, foe):
     """
     # If the foe has a special ability and is below half health
     if 'Special Ability' in foe and foe['Current HP'] < foe['Max HP'] / 2 and foe['Special Ability Counter'] == 0:
+
         foe_special_ability_name = next(iter(foe['Special Ability']))
         foe_special_ability = foe['Special Ability'][foe_special_ability_name]
         ability_power = foe_special_ability.get('Power')
@@ -992,6 +1032,8 @@ def game(character=None):
     """
     Initialize the game
     """
+    achieved_goal = False
+
     if character is None:
         rows = 5
         columns = 5
@@ -1005,16 +1047,14 @@ def game(character=None):
         board = make_board(rows, columns)
         describe_current_location(board, character)
 
-    achieved_goal = False
     while not achieved_goal:
-
         direction = get_user_choice(rows, columns, character)
         valid_move = validate_move(board, character, direction)
-
         if valid_move:
+            clear()
             move_character(character, direction)
-            describe_current_location(board, character)
             player_location = (character["X-coordinate"], character["Y-coordinate"])
+            describe_current_location(board, character)
 
             if board.get(player_location) in ["Winter Sanctum", "Inferno Lair"]:
                 special_foe = generate_special_foe(board, character)
@@ -1071,6 +1111,7 @@ def game(character=None):
             else:
                 there_is_a_challenger = check_for_foes()
                 if there_is_a_challenger:
+
                     # Generate a foe
                     foe = generate_foe()
                     print(f"You are facing a {foe['Name']}!")
@@ -1085,6 +1126,7 @@ def game(character=None):
                     if character['Experience Points'] >= character['EXP to Level Up']:
                         level_up(character)
 
+            describe_current_location(board, character)
             achieved_goal = check_win_condition(board, character)
 
         else:
@@ -1104,6 +1146,7 @@ def main():
     """
     Execute the start_menu function
     """
+    clear()
     start_menu()
 
 
