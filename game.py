@@ -3,6 +3,57 @@ Jason Chow
 A00942129
 """
 import random
+import json
+
+
+def start_menu():
+    """
+    Display the start menu and handle user choice.
+    """
+    print("The Quest For The Chocolate Orb!")
+    print("1. Start a New Game")
+    print("2. Load Game")
+    print("3. Quit")
+
+    while True:
+        choice = input("Enter your choice (1, 2, or 3): ")
+
+        if choice == "1":
+            game()
+            break
+        elif choice == "2":
+            load_game()
+            break
+        elif choice == "3":
+            print("Goodbye! Thanks for playing.")
+            break
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+
+def save_game(character):
+    """
+    """
+    with open("save.json", "w") as game_file:
+        json.dump(character, game_file, indent=4)
+
+    print("Game saved successfully!")
+
+
+def load_game():
+    """
+    Load an existing game and continue.
+    """
+    try:
+        with open("save.json", "r") as game_file:
+            character = json.load(game_file)
+
+        print("Game loaded successfully!")
+        game(character)
+
+    except FileNotFoundError:
+        print("No saved game found.")
+        start_menu()
 
 
 def make_board(rows, columns):
@@ -74,11 +125,11 @@ def make_character():
         "Attack": 1,
         "Defence": 0,
         "Abilities": {
-            1: {"Name": "Power Strike", "Power": 2, "AP Cost": 1},
+            "1": {"Name": "Power Strike", "Power": 2, "AP Cost": 1},
         },
         "Inventory": {
-            1: {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
-            2: {"Name": "Clothes", "Power": 0, "Type": "Armour"},
+            "1": {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
+            "2": {"Name": "Clothes", "Power": 0, "Type": "Armour"},
         },
         "Gold": 100,
         "Level": 1,
@@ -163,25 +214,25 @@ def learn_ability(character):
     if character['Level'] == 3:
         ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "Multi-Strike", "Power": 4, "AP Cost": 2}
-        character['Abilities'][ability_count] = new_ability
+        character['Abilities'][str(ability_count)] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     elif character['Level'] == 5:
         ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "Holy Strike", "Power": 7, "AP Cost": 3}
-        character['Abilities'][ability_count] = new_ability
+        character['Abilities'][str(ability_count)] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     elif character['Level'] == 7:
         ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "Ultimate Strike", "Power": 10, "AP Cost": 5}
-        character['Abilities'][ability_count] = new_ability
+        character['Abilities'][str(ability_count)] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
     elif character['Level'] == 10:
         ability_count = len(character['Abilities']) + 1
         new_ability = {"Name": "You're Playing Too Long", "Power": 999, "AP Cost": 10}
-        character['Abilities'][ability_count] = new_ability
+        character['Abilities'][str(ability_count)] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
 
@@ -250,7 +301,7 @@ def get_user_choice(rows, columns, character):
         print("3. Left")
         print("4. Right")
         user_input = input("Please choose a direction (1, 2, 3, or 4) or show map(5), character stats(6), "
-                           "inventory(7): ")
+                           "inventory(7), save game(8): ")
 
         if user_input == "1":
             print("You chose to go up...")
@@ -276,6 +327,9 @@ def get_user_choice(rows, columns, character):
 
         elif user_input == "7":
             get_character_inventory(character)
+
+        elif user_input == "8":
+            save_game(character)
 
         else:
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
@@ -447,7 +501,7 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Inferno Lair":
         return {
             "Name": "Dragon",
-            "Attack": 4,
+            "Attack": 6,
             "Current HP": 50,
             "Defence": 3,
             "Ability": {
@@ -460,7 +514,7 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Ice Guardian Room":
         return {
             "Name": "Ice Guardian",
-            "Attack": 6,
+            "Attack": 8,
             "Current HP": 70,
             "Defence": 4,
             "Ability": {
@@ -473,7 +527,7 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Fire Guardian Room":
         return {
             "Name": "Fire Guardian",
-            "Attack": 6,
+            "Attack": 8,
             "Current HP": 70,
             "Defence": 4,
             "Ability": {
@@ -486,8 +540,8 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Final Room":
         return {
             "Name": "Brain Devourer",
-            "Attack": 8,
-            "Current HP": 75,
+            "Attack": 10,
+            "Current HP": 80,
             "Defence": 5,
             "Ability": {
                 "Ethereal Blast": {"Power": 8, "Description": "A mystic force surges through the fabric of reality!"}
@@ -684,7 +738,7 @@ def add_inventory(character, item_name, item_power, item_quantity, item_type):
     # If the item is not in the inventory or is a non-consumable, add a new entry
     inventory_key_count = len(character['Inventory']) + 1
     new_item = {"Name": item_name, "Power": item_power, "Quantity": item_quantity, "Type": item_type}
-    character['Inventory'][inventory_key_count] = new_item
+    character['Inventory'][str(inventory_key_count)] = new_item
     print(f'You added {item_quantity} {item_name}(s) to your inventory!')
 
 
@@ -733,7 +787,7 @@ def combat_loop(character, foe):
                     print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)} |"
                           f" AP Cost: {value.get('AP Cost', 0)}")
 
-                skill_choice = int(input("Enter the number of the skill you want to use: "))
+                skill_choice = input("Enter the number of the skill you want to use: ")
 
                 if skill_choice in character['Abilities']:
                     ability = character['Abilities'][skill_choice]
@@ -776,7 +830,7 @@ def combat_loop(character, foe):
                 continue
 
             try:
-                item_choice = int(input("Choose an item to use: "))
+                item_choice = input("Choose an item to use: ")
                 use_item_success = use_item(character, item_choice)
 
                 if not use_item_success:
@@ -906,18 +960,27 @@ def is_alive(character):
     return True if character['Current HP'] > 0 else False
 
 
-def game():  # called from main
+def game(character=None):
     """
     Initialize the game
     """
-    rows = 5
-    columns = 5
-    board = make_board(rows, columns)
-    character = make_character()
-    achieved_goal = False
-    describe_current_location(board, character)
+    if character is None:
+        rows = 5
+        columns = 5
+        board = make_board(rows, columns)
+        character = make_character()
+        describe_current_location(board, character)
 
-    while not achieved_goal:
+    else:
+        rows = 5
+        columns = 5
+        board = make_board(rows, columns)
+        describe_current_location(board, character)
+
+    achieved_goal = False
+    game_active = [True]
+    while not achieved_goal and game_active:
+
         direction = get_user_choice(rows, columns, character)
         valid_move = validate_move(board, character, direction)
 
@@ -1012,9 +1075,9 @@ def game():  # called from main
 
 def main():
     """
-    Execute the game function
+    Execute the start_menu function
     """
-    game()
+    start_menu()
 
 
 if __name__ == "__main__":
