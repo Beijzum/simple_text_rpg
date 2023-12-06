@@ -4,6 +4,7 @@ A00942129
 """
 import random
 import json
+import sys
 
 
 def start_menu():
@@ -26,6 +27,7 @@ def start_menu():
             break
         elif choice == "3":
             print("Goodbye! Thanks for playing.")
+            sys.exit(0)
             break
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")
@@ -301,7 +303,7 @@ def get_user_choice(rows, columns, character):
         print("3. Left")
         print("4. Right")
         user_input = input("Please choose a direction (1, 2, 3, or 4) or show map(5), character stats(6), "
-                           "inventory(7), save game(8): ")
+                           "inventory(7), save game(8), start menu(0): ")
 
         if user_input == "1":
             print("You chose to go up...")
@@ -331,8 +333,11 @@ def get_user_choice(rows, columns, character):
         elif user_input == "8":
             save_game(character)
 
+        elif user_input == "0":
+            start_menu()
+
         else:
-            print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
+            print("Invalid choice.")
 
 
 def validate_move(board, character, direction):
