@@ -13,3 +13,5 @@ A00942129
 Beijzum
 
 ## Notes
+
+Best played in Terminal due to the clear() function.
