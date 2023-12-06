@@ -10,14 +10,16 @@ import os
 
 def clear():
     """
-    Clear the terminal screen using ANSI escape codes.
+    Clear the terminal screen for better readability.
+
+    This function will use "cls" for a Windows OS, else it will use "clear".
     """
     os.system("cls" if os.name == "nt" else "clear")
 
 
 def start_menu():
     """
-    Display the start menu and handle user choice.
+    Display the start menu with a choice of starting a new game, loading a game, or quitting.
     """
     print("The Quest For The Chocolate Orb!")
     print("1. Start a New Game")
@@ -44,6 +46,7 @@ def start_menu():
 
 def save_game(character):
     """
+    Save the current game state to a JSON file.
     """
     with open("save.json", "w") as game_file:
         json.dump(character, game_file, indent=4)
