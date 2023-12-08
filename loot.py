@@ -22,7 +22,7 @@ def add_equipment(character, item_name, item_power, item_type):
             character['Defence'] += item_power
 
 
-def add_inventory(character, item_name, item_power, item_quantity, item_type):
+def add_inventory(character, item_name, item_power, item_quantity, item_type, item_price=0):
     for key, value in character['Inventory'].items():
         if value['Name'] == item_name and value['Type'] == "Consumable":
             print(f"You added {item_quantity} {item_name}(s) to your inventory!")
@@ -46,20 +46,29 @@ def battle_rewards(character, foe):
     character['Gold'] += foe['Gold']
     print(f"Your total gold is now {character['Gold']}.")
 
-    # Check for special item in foe's inventory
-    special_item = foe.get('Special Item')
-    if special_item:
-        print(f"You obtained a special item: {special_item}!")
-        add_inventory(character, special_item, 0, 1, "Special")
+    # Check for miscellaneous item in foe's inventory
+    foe_inventory = foe.get('Loot', {})  # Returns an empty dictionary if 'Loot' key does not exist
 
-    # Check for equipment item in foe's inventory
-    equipment_item = foe.get('Equipment Item')
-    if equipment_item == "Radiant Blade":
-        print(f"You obtained a special item: {equipment_item}!")
-        add_equipment(character, equipment_item, 8, "Weapon")
-    elif equipment_item == "Guardian Armour":
-        print(f"You obtained a special item: {equipment_item}!")
-        add_equipment(character, equipment_item, 5, "Armour")
+    for item_name, item_info in foe_inventory.items():
+        item_type = item_info.get('Type', '')
+        item_price = item_info.get('Price', 0)
+
+        if item_type == 'Miscellaneous':
+            print(f"You obtained a sellable miscellaneous item: {item_name}!")
+            add_inventory(character, item_name, 0, 1, item_type, item_price=item_price)
+
+        elif item_type == 'Special':
+            print(f"You obtained a special item: {item_name}!")
+            add_inventory(character, item_name, 0, 1, item_type)
+
+        elif item_type == 'Equipment':
+            if item_name == "Radiant Blade":
+                print(f"You obtained a special weapon: {item_name}!")
+                add_equipment(character, item_name, 8, "Weapon")
+
+            elif item_name == "Guardian Armour":
+                print(f"You obtained special armor: {item_name}!")
+                add_equipment(character, item_name, 5, "Armour")
 
 
 def visit_shop(character):
@@ -71,7 +80,8 @@ def visit_shop(character):
         print("1. Buy Weapon")
         print("2. Buy Armour")
         print("3. Buy Potions")
-        print("4. Leave Shop")
+        print("4. Sell Items")
+        print("5. Leave Shop")
         print(f"You currently have {character['Gold']} gold.")
         choice = input("Choose an option (1, 2, 3, or 4): ")
 
@@ -187,7 +197,16 @@ def visit_shop(character):
                 character['Gold'] -= potion_cost
                 add_inventory(character, potion_name, potion_power, 1, "Consumable")
 
-        elif choice == "4":
+        # elif choice == "4":
+        #     clear()
+        #     print("\"What are you selling, stranger?\"")
+        #
+        #     for item_key, item_details in character['Inventory'].items():
+        #         if item_details.get('Type', '') == 'Miscellaneous':
+        #         clear()
+        #         print(f"{character['Inventory'][]}"
+
+        elif choice == "5":
             clear()
             print(f"\"Thanks for visiting the Shop! Come again.\"")
             break

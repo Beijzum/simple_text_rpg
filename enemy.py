@@ -89,7 +89,9 @@ def generate_special_foe(board, character):
             },
             "Gold": 50,
             "Experience Points": 50,
-            "Special Item": "Frozen Orb",
+            "Loot": {
+                "Frozen Orb": {"Type": "Special"},
+            }
 
         }
     elif board.get(coordinate) == "Inferno Lair":
@@ -103,7 +105,9 @@ def generate_special_foe(board, character):
             },
             "Gold": 100,
             "Experience Points": 50,
-            "Special Item": "Flame Orb",
+            "Loot": {
+                "Flame Orb": {"Type": "Special"},
+            }
         }
     elif board.get(coordinate) == "Ice Guardian Room":
         return {
@@ -116,7 +120,9 @@ def generate_special_foe(board, character):
             },
             "Gold": 100,
             "Experience Points": 50,
-            "Equipment Item": "Guardian Armour",
+            "Loot": {
+                "Guardian Armour": {"Type": "Equipment"},
+            }
         }
     elif board.get(coordinate) == "Fire Guardian Room":
         return {
@@ -129,7 +135,9 @@ def generate_special_foe(board, character):
             },
             "Gold": 100,
             "Experience Points": 50,
-            "Equipment Item": "Radiant Blade",
+            "Loot": {
+                "Radiant Blade": {"Type": "Equipment"},
+            }
         }
     elif board.get(coordinate) == "Final Room":
         return {
@@ -147,5 +155,7 @@ def generate_special_foe(board, character):
             "Special Ability Counter": 0,
             "Gold": 1000,
             "Experience Points": 1000,
-            "Special Item": "Chocolate Orb",
+            "Loot": {
+                "Chocolate Orb": {"Type": "Special"},
+            }
         }
