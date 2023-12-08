@@ -24,12 +24,16 @@ def add_equipment(character, item_name, item_power, item_type):
 
 def add_inventory(character, item_name, item_power, item_quantity, item_type, item_price=0):
     for key, value in character['Inventory'].items():
-        if value['Name'] == item_name and value['Type'] == "Consumable":
+        if value['Name'] == item_name and value['Type'] == "Special":
+            print(f"You already have {item_name} in your inventory.")
+            return
+        elif value['Name'] == item_name and value['Type'] == "Consumable":
             print(f"You added {item_quantity} {item_name}(s) to your inventory!")
             value['Quantity'] += item_quantity
             return
-        elif value['Name'] == item_name and value['Type'] == "Special":
-            print(f"You already have {item_name} in your inventory.")
+        elif value['Name'] == item_name and value['Type'] == "Miscellaneous":
+            print(f"You added {item_quantity} {item_name}(s) to your inventory!")
+            value['Quantity'] += item_quantity
             return
 
     # If the item is not in the inventory or is a non-consumable, add a new entry
