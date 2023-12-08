@@ -14,7 +14,7 @@ from character import (
 )
 from combat import (
     use_item,
-    enemy_attack,
+    enemy_attack, multi_strike,
 )
 from enemy import (
     generate_foe,
@@ -213,11 +213,17 @@ def combat_loop(character, foe):
                     ability = character['Abilities'][skill_choice]
                     ability_cost = ability.get('AP Cost', 0)
 
+                    if ability['Name'] == "Multi-Strike":
+                        multi_strike_power = ability['Power']
+                        ability_result = multi_strike(multi_strike_power)
+                    else:
+                        ability_result = ability['Power']
+
                     if character['Ability Points'] < ability_cost:
                         print("Insufficient Ability Points to use this skill.")
                         continue
 
-                    damage_dealt = max(0, character['Attack'] + ability.get('Power', 0) - foe['Defence'])
+                    damage_dealt = max(0, character['Attack'] + ability_result - foe['Defence'])
                     foe['Current HP'] -= damage_dealt
                     print(f"You used {ability['Name']} and dealt {damage_dealt} damage to the {foe['Name']}!")
                     character['Ability Points'] -= ability_cost

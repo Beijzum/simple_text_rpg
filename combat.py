@@ -1,5 +1,5 @@
 import random
-
+from itertools import cycle
 from utility import clear
 
 
@@ -80,3 +80,16 @@ def use_item(character, item_key):
         clear()
         print("Invalid item selection.")
         return False
+
+
+def multi_strike(power):
+    multipliers = [3, 4, 5]
+    multipliers_cycle = cycle(multipliers)
+
+    if random.random() < 0.3:
+        hits = next(multipliers_cycle)
+        print(f"Your attack hits {hits} times!")
+        return power * hits
+    else:
+        print("Your attack hits 2 times!")
+        return power * 2

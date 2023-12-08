@@ -84,7 +84,7 @@ def level_up(character):
 def learn_ability(character):
     if character['Level'] == 3:
         ability_count = len(character['Abilities']) + 1
-        new_ability = {"Name": "Multi-Strike", "Power": 4, "AP Cost": 2}
+        new_ability = {"Name": "Multi-Strike", "Power": 2, "AP Cost": 2}
         character['Abilities'][str(ability_count)] = new_ability
         print(f"You learned a new ability: {new_ability['Name']}!")
 
