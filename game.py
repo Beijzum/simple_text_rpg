@@ -9,14 +9,17 @@ from character import (
     get_character_inventory,
     get_character_stats,
     make_character,
-    level_up, is_alive
+    level_up,
+    is_alive,
 )
 from combat import (
     use_item,
     enemy_attack,
+)
+from enemy import (
     generate_foe,
+    generate_special_foe,
     check_for_foes,
-    generate_special_foe
 )
 from exploration import (
     show_map,
@@ -28,7 +31,8 @@ from exploration import (
 )
 from loot import (
     battle_rewards,
-    visit_shop)
+    visit_shop
+)
 from utility import clear
 
 
@@ -85,7 +89,7 @@ def load_game():
         start_menu()
 
 
-def get_user_choice(rows, columns, character):
+def get_user_choice(rows, columns, character, board):
     """
     Prompt user for input to choose a direction from a numbered list.
 
@@ -105,18 +109,22 @@ def get_user_choice(rows, columns, character):
                            "inventory(7), save game(8), start menu(0): ")
 
         if user_input == "1":
+            clear()
             print("You chose to go up...")
             return "up"
 
         elif user_input == "2":
+            clear()
             print("You chose to go down...")
             return "down"
 
         elif user_input == "3":
+            clear()
             print("You chose to go left...")
             return "left"
 
         elif user_input == "4":
+            clear()
             print("You chose to go right...")
             return "right"
 
@@ -141,7 +149,9 @@ def get_user_choice(rows, columns, character):
             start_menu()
 
         else:
+            clear()
             print("Invalid choice.")
+            describe_current_location(board, character)
 
 
 def combat_loop(character, foe):
@@ -286,22 +296,21 @@ def game(character=None):
         columns = 5
         board = make_board(rows, columns)
         character = make_character()
-        describe_current_location(board, character)
 
     else:
         rows = 5
         columns = 5
         board = make_board(rows, columns)
-        describe_current_location(board, character)
 
     while not achieved_goal:
-        direction = get_user_choice(rows, columns, character)
+        describe_current_location(board, character)
+        direction = get_user_choice(rows, columns, character, board)
         valid_move = validate_move(board, character, direction)
+
         if valid_move:
             clear()
             move_character(character, direction)
             player_location = (character["X-coordinate"], character["Y-coordinate"])
-            describe_current_location(board, character)
 
             if board.get(player_location) in ["Winter Sanctum", "Inferno Lair"]:
                 special_foe = generate_special_foe(board, character)
@@ -373,7 +382,6 @@ def game(character=None):
                     if character['Experience Points'] >= character['EXP to Level Up']:
                         level_up(character)
 
-            describe_current_location(board, character)
             achieved_goal = check_win_condition(board, character)
 
         else:
