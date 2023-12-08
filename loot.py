@@ -86,7 +86,8 @@ def visit_shop(character):
         print("2. Buy Armour")
         print("3. Buy Potions")
         print("4. Sell Items")
-        print("5. Leave Shop")
+        print("5. Rest for 15 gold")
+        print("6. Leave Shop")
         print(f"You currently have {character['Gold']} gold.")
         choice = input("Choose an option (1, 2, 3, or 4): ")
 
@@ -222,6 +223,19 @@ def visit_shop(character):
                     print(f"You sold {quantity} {item_details['Name']}(s) for {total_item_value} gold.")
 
         elif choice == "5":
+            clear()
+            if character['Gold'] < 15:
+                print("\"You don't have enough gold to rest.\"")
+                continue
+
+            else:
+                character['Gold'] -= 15
+                character['Current Health'] = character['Max HP']
+                character['Ability Points'] = character['Max AP']
+                print("\"Eat something while you rest, traveler.\"")
+                print("You feel refreshed! Your HP and AP are full.")
+
+        elif choice == "6":
             clear()
             print(f"\"Thanks for visiting the Shop! Come again.\"")
             break
