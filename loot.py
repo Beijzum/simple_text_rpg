@@ -202,14 +202,24 @@ def visit_shop(character):
                 character['Gold'] -= potion_cost
                 add_inventory(character, potion_name, potion_power, 1, "Consumable")
 
-        # elif choice == "4":
-        #     clear()
-        #     print("\"What are you selling, stranger?\"")
-        #
-        #     for item_key, item_details in character['Inventory'].items():
-        #         if item_details.get('Type', '') == 'Miscellaneous':
-        #         clear()
-        #         print(f"{character['Inventory'][]}"
+        elif choice == "4":
+            clear()
+            print("\"What are you selling, stranger?\"")
+            miscellaneous_items = [(key, value) for key, value in character['Inventory'].items()
+                                   if value.get('Type') == 'Miscellaneous']
+            for item_key, item_details in miscellaneous_items:
+                price = item_details.get('Price', 0)
+                quantity = item_details.get('Quantity', 0)
+
+                if not quantity:
+                    print("\"You've got nothing to sell!\"")
+                    continue
+
+                elif quantity > 0:
+                    total_item_value = price * quantity
+                    character["Gold"] += total_item_value
+                    item_details['Quantity'] -= quantity
+                    print(f"You sold {quantity} {item_details['Name']}(s) for {total_item_value} gold.")
 
         elif choice == "5":
             clear()
