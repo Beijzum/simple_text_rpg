@@ -20,6 +20,7 @@ from enemy import (
     generate_foe,
     generate_special_foe,
     check_for_foes,
+    generate_stronger_foe,
 )
 from exploration import (
     show_map,
@@ -377,8 +378,21 @@ def game(character=None):
 
             else:
                 there_is_a_challenger = check_for_foes()
-                if there_is_a_challenger:
+                if (there_is_a_challenger
+                        and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())
+                        and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())):
+                    foe = generate_stronger_foe()
+                    print(f"You are facing a {foe['Name']}!")
 
+                    combat_result = combat_loop(character, foe)
+
+                    if not combat_result:
+                        break
+
+                    if character['Experience Points'] >= character['EXP to Level Up']:
+                        level_up(character)
+
+                else:
                     # Generate a foe
                     foe = generate_foe()
                     print(f"You are facing a {foe['Name']}!")
