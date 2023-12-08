@@ -57,9 +57,11 @@ def start_menu():
             load_game()
             break
         elif choice == "3":
+            clear()
             print("Goodbye! Thanks for playing.")
             sys.exit(0)
         else:
+            clear()
             print("Invalid choice. Please enter 1, 2, or 3.")
 
 
@@ -245,6 +247,7 @@ def combat_loop(character, foe):
                     raise ValueError("No consumables in inventory")
 
             except ValueError as e:
+                clear()
                 print(e)
                 continue
 
