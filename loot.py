@@ -38,7 +38,8 @@ def add_inventory(character, item_name, item_power, item_quantity, item_type, it
 
     # If the item is not in the inventory or is a non-consumable, add a new entry
     inventory_key_count = len(character['Inventory']) + 1
-    new_item = {"Name": item_name, "Power": item_power, "Quantity": item_quantity, "Type": item_type}
+    new_item = {"Name": item_name, "Power": item_power, "Price": item_price, "Quantity": item_quantity,
+                "Type": item_type}
     character['Inventory'][str(inventory_key_count)] = new_item
     print(f'You added {item_quantity} {item_name}(s) to your inventory!')
 
