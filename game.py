@@ -40,12 +40,13 @@ def start_menu():
     """
     Display the start menu with a choice of starting a new game, loading a game, or quitting.
     """
-    print("The Quest For The Chocolate Orb!")
-    print("1. Start a New Game")
-    print("2. Load Game")
-    print("3. Quit")
 
     while True:
+        print("The Quest For The Chocolate Orb!")
+        print("1. Start a New Game")
+        print("2. Load Game")
+        print("3. Quit")
+
         choice = input("Enter your choice (1, 2, or 3): ")
 
         if choice == "1":
@@ -63,6 +64,7 @@ def start_menu():
         else:
             clear()
             print("Invalid choice. Please enter 1, 2, or 3.")
+            continue
 
 
 def save_game(character):
