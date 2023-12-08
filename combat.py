@@ -77,6 +77,7 @@ def use_item(character, item_key):
         return False
 
     except KeyError:
+        clear()
         print("Invalid item selection.")
         return False
 

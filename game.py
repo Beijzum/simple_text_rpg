@@ -209,12 +209,14 @@ def combat_loop(character, foe):
                     character['Ability Points'] -= ability_cost
 
                 else:
+                    clear()
                     raise ValueError("Invalid skill choice")
 
                 if is_alive(foe):
                     enemy_attack(character, foe)
 
             except ValueError:
+                clear()
                 print("Please enter a valid skill number.")
                 continue
 
@@ -244,6 +246,7 @@ def combat_loop(character, foe):
                     continue
 
             except ValueError:
+                clear()
                 print("Invalid input. Please enter a valid item number.")
 
         elif action == "4":
@@ -260,6 +263,7 @@ def combat_loop(character, foe):
             return False, character
 
         else:
+            clear()
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
 
     if is_alive(foe):
