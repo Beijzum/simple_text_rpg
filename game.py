@@ -49,7 +49,7 @@ def start_menu():
     """
 
     while True:
-        print(draw_box("The Quest For The Chocolate Orb! "))
+        print(draw_box("Quest for the Orb of Time"))
         draw()
         print("1. Start a New Game")
         print("2. Load Game")
@@ -455,8 +455,8 @@ def game(character=None):
 
         if is_alive(character) and achieved_goal:
             draw()
-            print(f"You have beaten the Final Boss!")
-            print("Congratulations, you win a life-time supply of your favourite chocolate!")
+            print(f"You have defeated the Time Warden!")
+            print("Congratulations, you have obtained the Orb of Time!")
             break
 
 

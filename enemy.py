@@ -240,6 +240,6 @@ def generate_special_foe(board, character):
             "Gold": 1000,
             "Experience Points": 1000,
             "Loot": {
-                "Chocolate Orb": {"Type": "Special"},
+                "Orb of Time": {"Type": "Special"},
             }
         }

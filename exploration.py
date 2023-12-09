@@ -219,12 +219,12 @@ def check_win_condition(board, character):
     :return: returns True if player character is located at the 'Final Room', otherwise False
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
-    >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Inventory": {"1": {"Name": "Chocolate Orb"}}}
+    >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Inventory": {"1": {"Name": "Orb of Time"}}}
     >>> check_win_condition(board_test, character_test)
     False
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
-    >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Inventory": {"1": {"Name": "Chocolate Orb"}}}
+    >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Inventory": {"1": {"Name": "Orb of Time"}}}
     >>> check_win_condition(board_test, character_test)
     True
     """
@@ -233,7 +233,7 @@ def check_win_condition(board, character):
     coordinate = (x, y)
 
     if (board.get(coordinate) == "Final Room"
-            and any(item['Name'] == "Chocolate Orb" for item in character['Inventory'].values())):
+            and any(item['Name'] == "Orb of Time" for item in character['Inventory'].values())):
         return True
     else:
         return False
