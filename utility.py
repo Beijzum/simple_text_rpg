@@ -10,7 +10,7 @@ def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
 
-def draw_box(message):
+def draw_box(message: str) -> str:
     length = len(message) + 4
     top_border = "+" + "\u2594" * length + "+"
     bottom_border = "+" + "\u2581" * length + "+"

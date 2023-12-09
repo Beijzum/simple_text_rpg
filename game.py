@@ -320,8 +320,10 @@ def combat_loop(character, foe):
             draw()
             print("Invalid choice. Please choose a valid option (1, 2, 3, 4, or 5).")
 
-    if is_alive(foe):
+    if is_alive(foe) and not is_alive(character):
+        print("You lost all your HP!")
         print(f"You were defeated by the {foe['Name']}. Game over!")
+        draw()
         return False
     else:
         battle_rewards(character, foe)
@@ -449,7 +451,7 @@ def game(character=None):
         else:
             print("You cannot go that direction.")
 
-        if character["Current HP"] == 0:
+        if character["Current HP"] <= 0:
             draw()
             print("You lost all your HP! You lose!")
             break
