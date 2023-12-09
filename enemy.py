@@ -1,4 +1,5 @@
 import random
+from unittest.mock import patch
 
 
 def check_for_foes():
@@ -9,6 +10,14 @@ def check_for_foes():
     :precondition: character must be alive with greater than 0 HP
     :postcondition: checks for the probability of encountering a challenge
     :return: returns True at a rate of 25%, otherwise False at a rate of 75%
+    >>> with patch('random.random', return_value=0.1):
+    ...     check_for_foes()
+    Watch out! Something has seen you!
+    True
+    >>> with patch('random.random', return_value=0.5):
+    ...     check_for_foes()
+    You managed to avoid enemies.
+    False
     """
     if random.random() <= 0.25:
         print("Watch out! Something has seen you!")
@@ -20,6 +29,24 @@ def check_for_foes():
 
 
 def generate_foe():
+    """
+    Generate a random foe from a list of possible foes.
+
+    :param: N/A
+    :precondition: character must be alive with greater than 0 HP
+    :postcondition: generates a random foe from a list of possible foes
+    :return: returns a dictionary containing the foe's stats
+
+    >>> with patch('random.choice', return_value='Goblin'):
+    ...     generate_foe()
+    {'Name': 'Goblin', 'Attack': 1, 'Current HP': 3, 'Defence': 0, 'Gold': 5, 'Experience Points': 5,\
+ 'Loot': {'Cheap Trinket': {'Price': 8, 'Type': 'Miscellaneous'}}}
+
+    >>> with patch('random.choice', return_value='Orc'):
+    ...     generate_foe()
+    {'Name': 'Orc', 'Attack': 2, 'Current HP': 6, 'Defence': 1, 'Gold': 10, 'Experience Points': 10,\
+ 'Loot': {'Cheap Trinket': {'Price': 8, 'Type': 'Miscellaneous'}}}
+    """
     foe_types = ["Goblin", "Orc", "Skeleton", "Ghoul"]
     random_foe = random.choice(foe_types)
 
@@ -74,6 +101,29 @@ def generate_foe():
 
 
 def generate_stronger_foe():
+    """
+    Generate a random stronger foe from a list of possible foes.
+
+    After an event, there will be a 1 in 4 chance of encountering a stronger foe.
+
+    :param: N/A
+    :precondition: character must be alive with greater than 0 HP
+    :precondition: character must have Frozen Orb and Flame Orb in inventory
+    :postcondition: generates a random stronger foe from a list of possible foes
+    :return: returns a dictionary containing the stronger foe's stats
+
+    >>> with patch('random.choice', return_value='Hobgoblin'):
+    ...     generate_stronger_foe()
+    {'Name': 'Hobgoblin', 'Attack': 5, 'Current HP': 8, 'Defence': 1, 'Ability': {'Reckless Attack': {'Power': 2,\
+ 'Description': 'The Hobgoblin is charging at you!'}}, 'Gold': 10, 'Experience Points': 10,\
+ 'Loot': {'Rare Relic': {'Price': 16, 'Type': 'Miscellaneous'}}}
+
+    >>> with patch('random.choice', return_value='High Orc'):
+    ...     generate_stronger_foe()
+    {'Name': 'High Orc', 'Attack': 7, 'Current HP': 16, 'Defence': 2, 'Ability': {'Spear Throw': {'Power': 4,\
+ 'Description': 'The High Orc aims its spear at you!'}}, 'Gold': 20, 'Experience Points': 20,\
+ 'Loot': {'Rare Relic': {'Price': 16, 'Type': 'Miscellaneous'}}}
+    """
     foe_types = ["Hobgoblin", "High Orc", "Iron-Clad Skeleton", "Draugr", "Wyvern"]
     random_foe = random.choice(foe_types)
 
@@ -155,6 +205,32 @@ def generate_stronger_foe():
 
 
 def generate_special_foe(board, character):
+    """
+    Generate a special foe based on the character's current location on the board.
+
+    :param board: a dictionary with the board's layout and coordinates
+    :param character: a dictionary with character stats
+    :precondition: character must be alive with greater than 0 HP
+    :precondition: character must be in a special room
+    :precondition: depending on the foe, character must have Frozen Orb and Flame Orb in inventory
+    :precondition: depending on the foe, character must have Radiant Blade and Guardian Armour in inventory
+    :postcondition: generates a special foe based on the character's current location on the board and inventory
+    :return: a dictionary representing the generated foe.
+
+    >>> test_board = {(0, 0): "Winter Sanctum"}
+    >>> test_character = {"X-coordinate": 0, "Y-coordinate": 0}
+    >>> generate_special_foe(test_board, test_character)
+    {'Name': 'Abominable Snowman', 'Attack': 4, 'Current HP': 30, 'Defence': 2, 'Ability': {\
+'Snowball': {'Power': 4, 'Description': 'The Abominable Snowman throws a giant snowball at you!'}}, \
+'Gold': 30, 'Experience Points': 30, 'Loot': {'Frozen Orb': {'Type': 'Special'}}}
+
+    >>> test_board = {(0, 0): "Inferno Lair"}
+    >>> test_character = {"X-coordinate": 0, "Y-coordinate": 0}
+    >>> generate_special_foe(test_board, test_character)
+    {'Name': 'Dragon', 'Attack': 6, 'Current HP': 50, 'Defence': 3, 'Ability': {\
+'Flame Breath': {'Power': 4, 'Description': 'The Dragon unleashes a fiery breath!'}}, \
+'Gold': 40, 'Experience Points': 40, 'Loot': {'Flame Orb': {'Type': 'Special'}}}
+    """
     x = character["X-coordinate"]
     y = character["Y-coordinate"]
     coordinate = (x, y)
