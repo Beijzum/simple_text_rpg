@@ -93,7 +93,7 @@ def visit_shop(character):
 
         if choice == "1":  # Buying a weapon
             clear()
-            print(f"1. Iron Sword $10\n2. Steel Sword $30")
+            print(f"1. Iron Sword $10\n2. Steel Sword $30\n3. Obsidian Blade $75\n4. Runic Greatsword $150")
             weapon_choice = input("Enter the number of the weapon you want to buy: ")
 
             if weapon_choice == "1":
@@ -144,7 +144,7 @@ def visit_shop(character):
 
         elif choice == "2":  # Buying armour
             clear()
-            print(f"1. Leather Armour $10\n2. Iron Armour $30")
+            print(f"1. Leather Armour $10\n2. Iron Armour $30\n3. Steel Armour $75\n4. Dragon Scale Armour $150")
             armour_choice = input("Enter the number of the armour you want to buy: ")
 
             if armour_choice == "1":
