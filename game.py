@@ -14,7 +14,8 @@ from character import (
 )
 from combat import (
     use_item,
-    enemy_attack, multi_strike,
+    enemy_attack,
+    multi_strike,
 )
 from enemy import (
     generate_foe,
@@ -28,11 +29,12 @@ from exploration import (
     describe_current_location,
     validate_move,
     move_character,
-    check_win_condition
+    check_win_condition,
+    check_stronger_foe,
 )
 from loot import (
     battle_rewards,
-    visit_shop
+    visit_shop,
 )
 from utility import clear
 
@@ -337,7 +339,8 @@ def game(character=None):
                     level_up(character)
 
             elif (board.get(player_location) == "Ice Guardian Room"
-                  and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())):
+                  and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())
+                  and character["Stronger Enemies"]):
                 special_foe = generate_special_foe(board, character)
                 print(f"You are facing {special_foe['Name']}!")
 
@@ -350,7 +353,8 @@ def game(character=None):
                     level_up(character)
 
             elif (board.get(player_location) == "Fire Guardian Room"
-                  and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())):
+                  and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())
+                  and character["Stronger Enemies"]):
                 special_foe = generate_special_foe(board, character)
                 print(f"You are facing {special_foe['Name']}!")
 
@@ -378,9 +382,7 @@ def game(character=None):
 
             else:
                 there_is_a_challenger = check_for_foes()
-                if (there_is_a_challenger
-                        and any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())
-                        and any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())):
+                if there_is_a_challenger and character["Stronger Enemies"]:
                     foe = generate_stronger_foe()
                     print(f"You are facing a {foe['Name']}!")
 
@@ -392,7 +394,7 @@ def game(character=None):
                     if character['Experience Points'] >= character['EXP to Level Up']:
                         level_up(character)
 
-                else:
+                elif there_is_a_challenger and not character["Stronger Enemies"]:
                     # Generate a foe
                     foe = generate_foe()
                     print(f"You are facing a {foe['Name']}!")
@@ -408,6 +410,7 @@ def game(character=None):
                         level_up(character)
 
             achieved_goal = check_win_condition(board, character)
+            check_stronger_foe(character)
 
         else:
             print("You cannot go that direction.")

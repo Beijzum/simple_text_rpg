@@ -30,7 +30,8 @@ def make_character():
         "Gold": 100,
         "Level": 1,
         "Experience Points": 0,
-        "EXP to Level Up": 10
+        "EXP to Level Up": 10,
+        "Stronger Enemies": False,
     }
 
 

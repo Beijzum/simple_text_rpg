@@ -69,11 +69,11 @@ def battle_rewards(character, foe):
         elif item_type == 'Equipment':
             if item_name == "Radiant Blade":
                 print(f"You obtained a special weapon: {item_name}!")
-                add_equipment(character, item_name, 8, "Weapon")
+                add_equipment(character, item_name, 10, "Weapon")
 
             elif item_name == "Guardian Armour":
                 print(f"You obtained special armor: {item_name}!")
-                add_equipment(character, item_name, 5, "Armour")
+                add_equipment(character, item_name, 6, "Armour")
 
 
 def visit_shop(character):
@@ -105,6 +105,16 @@ def visit_shop(character):
                 weapon_cost = 30
                 weapon_name = "Steel Sword"
                 weapon_power = 4
+
+            elif weapon_choice == "3":
+                weapon_cost = 75
+                weapon_name = "Obsidian Blade"
+                weapon_power = 6
+
+            elif weapon_choice == "4":
+                weapon_cost = 150
+                weapon_name = "Runic Greatsword"
+                weapon_power = 8
 
             else:
                 clear()
@@ -143,9 +153,19 @@ def visit_shop(character):
                 armour_power = 1
 
             elif armour_choice == "2":
-                armour_cost = 30
+                armour_cost = 40
                 armour_name = "Iron Armour"
                 armour_power = 2
+
+            elif armour_choice == "3":
+                armour_cost = 75
+                armour_name = "Steel Armour"
+                armour_power = 3
+
+            elif armour_choice == "4":
+                armour_cost = 150
+                armour_name = "Dragon Scale Armour"
+                armour_power = 4
 
             else:
                 clear()

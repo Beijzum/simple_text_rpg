@@ -80,8 +80,8 @@ def generate_stronger_foe():
     if random_foe == "Hobgoblin":
         return {
             "Name": "Hobgoblin",
-            "Attack": 2,
-            "Current HP": 6,
+            "Attack": 5,
+            "Current HP": 8,
             "Defence": 1,
             "Ability": {
                 "Reckless Attack": {"Power": 2, "Description": "The Hobgoblin is charging at you!"},
@@ -95,8 +95,8 @@ def generate_stronger_foe():
     elif random_foe == "High Orc":
         return {
             "Name": "High Orc",
-            "Attack": 4,
-            "Current HP": 14,
+            "Attack": 7,
+            "Current HP": 16,
             "Defence": 2,
             "Ability": {
                 "Spear Throw": {"Power": 4, "Description": "The High Orc aims its spear at you!"},
@@ -110,9 +110,9 @@ def generate_stronger_foe():
     elif random_foe == "Iron-Clad Skeleton":
         return {
             "Name": "Iron-Clad Skeleton",
-            "Attack": 3,
-            "Current HP": 8,
-            "Defence": 4,
+            "Attack": 6,
+            "Current HP": 10,
+            "Defence": 5,
             "Ability": {
                 "Downward Smash": {"Power": 3, "Description": "The Iron-Clad Skeleton raises its weapon!"},
             },
@@ -125,8 +125,8 @@ def generate_stronger_foe():
     elif random_foe == "Draugr":
         return {
             "Name": "Draugr",
-            "Attack": 2,
-            "Current HP": 20,
+            "Attack": 5,
+            "Current HP": 23,
             "Defence": 1,
             "Ability": {
                 "Deadly Bite": {"Power": 4, "Description": "The Draugr lunges at you!"},
@@ -140,8 +140,8 @@ def generate_stronger_foe():
     elif random_foe == "Wyvern":
         return {
             "Name": "Wyvern",
-            "Attack": 6,
-            "Current HP": 25,
+            "Attack": 9,
+            "Current HP": 30,
             "Defence": 3,
             "Ability": {
                 "Wyvern's Breath": {"Power": 6, "Description": "The Wvyern reveals its wide maw!"},
@@ -193,11 +193,11 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Ice Guardian Room":
         return {
             "Name": "Ice Guardian",
-            "Attack": 8,
-            "Current HP": 70,
+            "Attack": 12,
+            "Current HP": 80,
             "Defence": 4,
             "Ability": {
-                "Snowstorm": {"Power": 6, "Description": "The Ice Guardian is creating a snowstorm!"}
+                "Snowstorm": {"Power": 8, "Description": "The Ice Guardian is creating a snowstorm!"}
             },
             "Gold": 100,
             "Experience Points": 50,
@@ -208,11 +208,11 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Fire Guardian Room":
         return {
             "Name": "Fire Guardian",
-            "Attack": 8,
-            "Current HP": 70,
+            "Attack": 12,
+            "Current HP": 80,
             "Defence": 4,
             "Ability": {
-                "Infernal Blaze": {"Power": 6, "Description": "The Fire Guardian conjures fiery devastation!"}
+                "Infernal Blaze": {"Power": 8, "Description": "The Fire Guardian conjures fiery devastation!"}
             },
             "Gold": 100,
             "Experience Points": 50,
@@ -223,12 +223,12 @@ def generate_special_foe(board, character):
     elif board.get(coordinate) == "Final Room":
         return {
             "Name": "Brain Devourer",
-            "Attack": 10,
-            "Max HP": 80,
-            "Current HP": 80,
+            "Attack": 15,
+            "Max HP": 100,
+            "Current HP": 100,
             "Defence": 5,
             "Ability": {
-                "Ethereal Blast": {"Power": 8, "Description": "A mystic force surges through the fabric of reality!"}
+                "Ethereal Blast": {"Power": 12, "Description": "A mystic force surges through the fabric of reality!"}
             },
             "Special Ability": {
                 "Supernova": {"Power": 25, "Description": "The Brain Devourer is channeling cosmic energy!"},

@@ -217,12 +217,12 @@ def check_win_condition(board, character):
     :return: returns True if player character is located at the 'Final Room', otherwise False
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
-    >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Current HP": 5}
+    >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0, "Inventory": {"1": {"Name": "Chocolate Orb"}}}
     >>> check_win_condition(board_test, character_test)
     False
 
     >>> board_test = {(0, 0): "Starting Room", (2, 2): "Final Room"}
-    >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Current HP": 5}
+    >>> character_test = {"X-coordinate": 2, "Y-coordinate": 2, "Inventory": {"1": {"Name": "Chocolate Orb"}}}
     >>> check_win_condition(board_test, character_test)
     True
     """
@@ -232,6 +232,18 @@ def check_win_condition(board, character):
 
     if (board.get(coordinate) == "Final Room"
             and any(item['Name'] == "Chocolate Orb" for item in character['Inventory'].values())):
+        return True
+    else:
+        return False
+
+
+def check_stronger_foe(character):
+    frozen_orb_found = any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())
+    flame_orb_found = any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())
+
+    if frozen_orb_found and flame_orb_found and not character['Stronger Enemies']:
+        character['Stronger Enemies'] = True
+        print("You sense a stronger presence of enemies in the dungeon.")
         return True
     else:
         return False
