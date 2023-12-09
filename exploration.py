@@ -1,5 +1,5 @@
 import random
-
+from unittest.mock import patch
 from utility import draw_box
 
 
@@ -14,6 +14,12 @@ def make_board(rows, columns):
     :postcondition: creates a dictionary based on the rows and columns values
     :postcondition: rooms will be randomly populated
     :return: a dictionary with x, y coordinates as a key, and a room name as a value
+
+    >>> with patch('random.choice', return_value='Treasure Room'):
+    ...     make_board(3, 3)
+    {(0, 0): 'Starting Room', (0, 1): 'Treasure Room', (0, 2): 'Winter Sanctum', (1, 0): 'Treasure Room',\
+ (1, 1): 'Traveling Merchant', (1, 2): 'Ice Guardian Room', (2, 0): 'Inferno Lair',\
+ (2, 1): 'Fire Guardian Room', (2, 2): 'Final Room'}
     """
     board = {}
     room_list = ["Treasure Room", "Enchanted Chamber", "Empty Room", "Dark Room"]
@@ -50,6 +56,32 @@ def make_board(rows, columns):
 
 
 def show_map(board_rows, board_columns, character):
+    """
+    Display the game map with the current player location, traveling merchant, special rooms, and boss room.
+
+    :param board_rows: an integer representing the number of rows in the game board.
+    :param board_columns: an integer representing the number of columns in the game board.
+    :param character: a dictionary representing the player character, including their current location.
+    :precondition: character must be alive with greater than 0 HP
+    :precondition: board_rows must be an integer greater than 0.
+    :precondition: board_columns must be an integer greater than 0.
+    :precondition: character must be a dictionary with "X-coordinate" and "Y-coordinate" keys.
+    :postcondition: prints the game map with the player character, traveling merchant, special rooms, and boss room.
+    :return: a string representing the game map.
+
+    >>> show_map(5, 5, {"X-coordinate": 0, "Y-coordinate": 0})
+      ------------------------------------------------------
+      | @Player  | (0, 1)   | (0, 2)   | (0, 3)   |#Special|
+      ------------------------------------------------------
+      | (1, 0)   | (1, 1)   | (1, 2)   | (1, 3)   | (1, 4) |
+      ------------------------------------------------------
+      | (2, 0)   | (2, 1)   | $Shop    | (2, 3)   | (2, 4) |
+      ------------------------------------------------------
+      | (3, 0)   | (3, 1)   | (3, 2)   | (3, 3)   |#Special|
+      ------------------------------------------------------
+      |#Special  | (4, 1)   | (4, 2)   |#Special  | #Boss  |
+      ------------------------------------------------------
+    """
     rows = board_rows
     columns = board_columns
 
@@ -240,6 +272,29 @@ def check_win_condition(board, character):
 
 
 def check_stronger_foe(character):
+    """
+    Check if the character has both the Frozen Orb and Flame Orb in their inventory.
+
+    If both the Frozen Orb and Flame Orb are found in the character's inventory, the function will update the
+    character's 'Stronger Enemies' status to True and print a message.
+
+    :param character: a dictionary representing the player character
+    :precondition: character must be alive with greater than 0 HP
+    :precondition: character must have both the Frozen Orb and Flame Orb in their inventory
+    :postcondition: changes 'Stronger Enemies' to True if both special items are found in the inventory.
+    :return: changes 'Stronger Enemies' to True and prints a message if both special items are found in the inventory.
+
+    >>> character_test = {"Inventory": {"1": {"Name": "Frozen Orb"}, "2": {"Name": "Flame Orb"}}, "Stronger Enemies": False}
+    >>> check_stronger_foe(character_test)
+    +▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔+
+    |  You sense the presence of stronger enemies in the dungeon.  |
+    +▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁+
+    True
+
+    >>> character_test = {"Inventory": {"1": {"Name": "Frozen Orb"}}, "Stronger Enemies": False}
+    >>> check_stronger_foe(character_test)
+    False
+    """
     frozen_orb_found = any(item['Name'] == "Frozen Orb" for item in character['Inventory'].values())
     flame_orb_found = any(item['Name'] == "Flame Orb" for item in character['Inventory'].values())
 
