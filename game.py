@@ -50,7 +50,7 @@ def start_menu():
         print("2. Load Game")
         print("3. Quit")
 
-        choice = input("Enter your choice (1, 2, or 3): ")
+        choice = input("Enter your choice 1, 2, or 3: ")
 
         if choice == "1":
             clear()
@@ -189,7 +189,7 @@ def combat_loop(character, foe):
         print("4. Check Enemy Stats")
         print("5. Run Away")
 
-        action = input("Choose an option (1, 2, 3, or 4): ")
+        action = input("Choose an option (1, 2, 3, 4, or 5): ")
 
         if action == "1":
             clear()
@@ -288,7 +288,7 @@ def combat_loop(character, foe):
 
         else:
             clear()
-            print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
+            print("Invalid choice. Please choose a valid option (1, 2, 3, 4, or 5).")
 
     if is_alive(foe):
         print(f"You were defeated by the {foe['Name']}. Game over!")
@@ -316,8 +316,8 @@ def game(character=None):
         columns = 5
         board = make_board(rows, columns)
 
+    describe_current_location(board, character)
     while not achieved_goal:
-        describe_current_location(board, character)
         direction = get_user_choice(rows, columns, character, board)
         valid_move = validate_move(board, character, direction)
 
@@ -325,6 +325,7 @@ def game(character=None):
             clear()
             move_character(character, direction)
             player_location = (character["X-coordinate"], character["Y-coordinate"])
+            describe_current_location(board, character)
 
             if board.get(player_location) in ["Winter Sanctum", "Inferno Lair"]:
                 special_foe = generate_special_foe(board, character)

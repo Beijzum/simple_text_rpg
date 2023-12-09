@@ -58,13 +58,13 @@ def battle_rewards(character, foe):
         item_type = item_info.get('Type', '')
         item_price = item_info.get('Price', 0)
 
-        if item_type == 'Miscellaneous':
-            print(f"You obtained a sellable miscellaneous item: {item_name}!")
-            add_inventory(character, item_name, 0, 1, item_type, item_price=item_price)
-
-        elif item_type == 'Special':
+        if item_type == 'Special':
             print(f"You obtained a special item: {item_name}!")
             add_inventory(character, item_name, 0, 1, item_type)
+
+        elif item_type == 'Miscellaneous':
+            print(f"You obtained a sellable miscellaneous item: {item_name}!")
+            add_inventory(character, item_name, 0, 1, item_type, item_price=item_price)
 
         elif item_type == 'Equipment':
             if item_name == "Radiant Blade":
@@ -89,7 +89,7 @@ def visit_shop(character):
         print("5. Rest for 15 gold")
         print("6. Leave Shop")
         print(f"You currently have {character['Gold']} gold.")
-        choice = input("Choose an option (1, 2, 3, or 4): ")
+        choice = input("Choose an option (1, 2, 3, 4, 5, or 6): ")
 
         if choice == "1":  # Buying a weapon
             clear()
@@ -233,8 +233,8 @@ def visit_shop(character):
                 quantity = item_details.get('Quantity', 0)
 
                 if not quantity:
-                    print("\"You've got nothing to sell!\"")
-                    continue
+                    print("\"You've got nothing to sell, stranger!\"")
+                    break
 
                 elif quantity > 0:
                     total_item_value = price * quantity
@@ -252,7 +252,7 @@ def visit_shop(character):
                 character['Gold'] -= 15
                 character['Current Health'] = character['Max HP']
                 character['Ability Points'] = character['Max AP']
-                print("\"Eat something while you rest, traveler.\"")
+                print("\"Eat something while you rest, stranger.\"")
                 print("You feel refreshed! Your HP and AP are full.")
 
         elif choice == "6":
