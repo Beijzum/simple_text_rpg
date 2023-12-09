@@ -251,21 +251,20 @@ def visit_shop(character):
             clear()
             draw()
             print("\"What are you selling, stranger?\"")
-            miscellaneous_items = [(key, value) for key, value in character['Inventory'].items()
-                                   if value.get('Type') == 'Miscellaneous']
-            for item_key, item_details in miscellaneous_items:
-                price = item_details.get('Price', 0)
-                quantity = item_details.get('Quantity', 0)
+            miscellaneous_items = [(key, item) for key, item in character['Inventory'].items()
+                                   if item.get('Type') == 'Miscellaneous']
+            total_value = sum(item.get('Price', 0) * item.get('Quantity', 0) for key, item in miscellaneous_items)
 
-                if not quantity:
-                    print("\"You've got nothing to sell, stranger!\"")
-                    break
+            if total_value > 0:
+                character["Gold"] += total_value
 
-                elif quantity > 0:
-                    total_item_value = price * quantity
-                    character["Gold"] += total_item_value
-                    item_details['Quantity'] -= quantity
-                    print(f"You sold {quantity} {item_details['Name']}(s) for {total_item_value} gold.")
+                # Reduce the quantity of all miscellaneous items to zero
+                for key, item_detail in miscellaneous_items:
+                    item_detail['Quantity'] = 0
+
+                print(f"You sold all miscellaneous items for {total_value} gold.")
+            else:
+                print("\"You've got nothing to sell, stranger!\"")
 
         elif choice == "5":
             clear()

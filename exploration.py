@@ -202,8 +202,8 @@ def describe_current_location(board, character):
     elif (board[player_location] == "Final Room" and
           not any(item['Name'] == "Radiant Blade" for item in character['Inventory'].values()) or
           not any(item['Name'] == "Guardian Armour" for item in character['Inventory'].values())):
-        print("You see a large, menacing creature guarding the room.")
-        print("You must find the two special items to defeat this foe.")
+        print("You sense a powerful dimensional anomaly in this area.")
+        print("You must find the two special items overcome this challenge.")
 
 
 def check_win_condition(board, character):

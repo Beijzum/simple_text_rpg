@@ -197,7 +197,8 @@ def generate_special_foe(board, character):
             "Current HP": 80,
             "Defence": 4,
             "Ability": {
-                "Snowstorm": {"Power": 8, "Description": "The Ice Guardian is creating a snowstorm!"}
+                "Snowstorm": {"Power": 8, "Description": "The Ice Guardian is creating a snowstorm!"},
+                "Frostbite": {"Power": 10, "Description": "The Ice Guardian is rapidly lowering the temperature!"},
             },
             "Gold": 100,
             "Experience Points": 50,
@@ -212,7 +213,8 @@ def generate_special_foe(board, character):
             "Current HP": 80,
             "Defence": 4,
             "Ability": {
-                "Infernal Blaze": {"Power": 8, "Description": "The Fire Guardian conjures fiery devastation!"}
+                "Infernal Blaze": {"Power": 8, "Description": "The Fire Guardian conjures fiery devastation!"},
+                "Scorching Heat": {"Power": 10, "Description": "The Fire Guardian is raising the temperature!"},
             },
             "Gold": 100,
             "Experience Points": 50,
@@ -222,16 +224,17 @@ def generate_special_foe(board, character):
         }
     elif board.get(coordinate) == "Final Room":
         return {
-            "Name": "Brain Devourer",
+            "Name": "Time Warden",
             "Attack": 15,
             "Max HP": 100,
             "Current HP": 100,
             "Defence": 5,
             "Ability": {
-                "Ethereal Blast": {"Power": 12, "Description": "A mystic force surges through the fabric of reality!"}
+                "Hasten": {"Power": 12, "Description": "The Time Warden hastens itself and attacks rapidly!"},
+                "Temporal Shift": {"Power": 15, "Description": "The Time Warden releases time-warping energy!"},
             },
             "Special Ability": {
-                "Supernova": {"Power": 25, "Description": "The Brain Devourer is channeling cosmic energy!"},
+                "Chrono Stasis": {"Power": 25, "Description": "The Time Warden tries to control your flow of time!"},
             },
             "Special Ability Counter": 0,
             "Gold": 1000,
