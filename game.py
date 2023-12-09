@@ -39,6 +39,7 @@ from loot import (
 from utility import (
     clear,
     draw_box,
+    draw,
 )
 
 
@@ -49,9 +50,11 @@ def start_menu():
 
     while True:
         print(draw_box("The Quest For The Chocolate Orb! "))
+        draw()
         print("1. Start a New Game")
         print("2. Load Game")
         print("3. Quit")
+        draw()
 
         choice = input("Enter your choice 1, 2, or 3: ")
 
@@ -65,7 +68,9 @@ def start_menu():
             break
         elif choice == "3":
             clear()
+            draw()
             print("Goodbye! Thanks for playing.")
+            draw()
             sys.exit(0)
         else:
             clear()
@@ -111,6 +116,7 @@ def get_user_choice(rows, columns, character, board):
     :return: returns a string consisting of "up", "down", "left", or "right"
     """
     while True:
+        draw()
         print("1. Up")
         print("2. Down")
         print("3. Left")
@@ -120,38 +126,46 @@ def get_user_choice(rows, columns, character, board):
 
         if user_input == "1":
             clear()
+            draw()
             print("You chose to go up...")
             return "up"
 
         elif user_input == "2":
             clear()
+            draw()
             print("You chose to go down...")
             return "down"
 
         elif user_input == "3":
             clear()
+            draw()
             print("You chose to go left...")
             return "left"
 
         elif user_input == "4":
             clear()
+            draw()
             print("You chose to go right...")
             return "right"
 
         elif user_input == "5":
             clear()
+            draw()
             show_map(rows, columns, character)
 
         elif user_input == "6":
             clear()
+            draw()
             get_character_stats(character)
 
         elif user_input == "7":
             clear()
+            draw()
             get_character_inventory(character)
 
         elif user_input == "8":
             clear()
+            draw()
             save_game(character)
 
         elif user_input == "0":
@@ -160,6 +174,7 @@ def get_user_choice(rows, columns, character, board):
 
         else:
             clear()
+            draw()
             print("Invalid choice.")
             describe_current_location(board, character)
 
@@ -185,6 +200,7 @@ def combat_loop(character, foe):
 
         print(f"Your HP: {character['Current HP']}")
         print(f"Your AP: {character['Ability Points']}")
+        draw()
         print("Options:")
         print("1. Attack")
         print("2. Use Ability")
@@ -196,6 +212,7 @@ def combat_loop(character, foe):
 
         if action == "1":
             clear()
+            draw()
             damage_dealt = max(0, character['Attack'] - foe['Defence'])
             foe['Current HP'] -= damage_dealt
             print(f"You dealt {damage_dealt} damage to the {foe['Name']}!")
@@ -206,16 +223,18 @@ def combat_loop(character, foe):
 
         elif action == "2":
             clear()
+            draw()
             try:
                 print("Choose an ability: ")
                 for key, value in character['Abilities'].items():
                     print(f"{key}. \"{value['Name']}\" | Power: {value.get('Power', 0)} |"
                           f" AP Cost: {value.get('AP Cost', 0)}")
-
+                draw()
                 skill_choice = input("Enter the number of the skill you want to use: ")
 
                 if skill_choice in character['Abilities']:
                     clear()
+                    draw()
                     ability = character['Abilities'][skill_choice]
                     ability_cost = ability.get('AP Cost', 0)
 
@@ -236,6 +255,7 @@ def combat_loop(character, foe):
 
                 else:
                     clear()
+                    draw()
                     raise ValueError("Invalid skill choice")
 
                 if is_alive(foe):
@@ -243,11 +263,13 @@ def combat_loop(character, foe):
 
             except ValueError:
                 clear()
+                draw()
                 print("Please enter a valid skill number.")
                 continue
 
         elif action == "3":
             clear()
+            draw()
             try:
                 # Check if there are any consumables in the inventory
                 consumables_exist = any(item.get('Type') == "Consumable" for item in character['Inventory'].values())
@@ -256,12 +278,13 @@ def combat_loop(character, foe):
                     for key, value in character['Inventory'].items():
                         if value.get('Type') == "Consumable":
                             print(f"{key}. {value['Name']} x{value.get('Quantity', 0)}")
-
+                    draw()
                 else:
                     raise ValueError("No consumables in inventory")
 
             except ValueError as e:
                 clear()
+                draw()
                 print(e)
                 continue
 
@@ -274,10 +297,12 @@ def combat_loop(character, foe):
 
             except ValueError:
                 clear()
+                draw()
                 print("Invalid input. Please enter a valid item number.")
 
         elif action == "4":
             clear()
+            draw()
             print(f"{foe['Name']}'s HP: {foe['Current HP']}")
             print(f"{foe['Name']}'s Attack: {foe['Attack']}")
             print(f"{foe['Name']}'s Defence: {foe['Defence']}")
@@ -285,12 +310,14 @@ def combat_loop(character, foe):
 
         elif action == "5":
             clear()
+            draw()
             # Player chooses to run away
             print("You run away from the battle.")
             return False, character
 
         else:
             clear()
+            draw()
             print("Invalid choice. Please choose a valid option (1, 2, 3, 4, or 5).")
 
     if is_alive(foe):
@@ -319,6 +346,7 @@ def game(character=None):
         columns = 5
         board = make_board(rows, columns)
 
+    draw()
     describe_current_location(board, character)
     while not achieved_goal:
         direction = get_user_choice(rows, columns, character, board)
@@ -326,6 +354,7 @@ def game(character=None):
 
         if valid_move:
             clear()
+            draw()
             move_character(character, direction)
             player_location = (character["X-coordinate"], character["Y-coordinate"])
             describe_current_location(board, character)
@@ -420,10 +449,12 @@ def game(character=None):
             print("You cannot go that direction.")
 
         if character["Current HP"] == 0:
+            draw()
             print("You lost all your HP! You lose!")
             break
 
         if is_alive(character) and achieved_goal:
+            draw()
             print(f"You have beaten the Final Boss!")
             print("Congratulations, you win a life-time supply of your favourite chocolate!")
             break

@@ -17,3 +17,7 @@ def draw_box(message):
 
     box_message = f"{top_border}\n|  {message}  |\n{bottom_border}"
     return box_message
+
+
+def draw():
+    print("xX------------------------------------------------------Xx")

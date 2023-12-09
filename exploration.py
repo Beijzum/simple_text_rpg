@@ -56,22 +56,22 @@ def show_map(board_rows, board_columns, character):
     player_location = character["X-coordinate"], character["Y-coordinate"]
 
     for row in range(rows):
-        print("----------------------------------------------")
+        print("  ------------------------------------------------------")
         for column in range(columns):
             position = (row, column)
             if position == player_location:
-                print("| @Player", end="")
+                print("  | @Player", end="")
             elif position == (int(rows / 2), int(columns / 2)):
-                print("| $Shop ", end=" ")
+                print("  | $Shop ", end=" ")
             elif position in [(rows - 1, 0), (0, columns - 1), (rows - 1, columns - 2), (rows - 2, columns - 1)]:
-                print("|#Special", end="")
+                print("  |#Special", end="")
             elif position == (rows - 1, columns - 1):
-                print("| #Boss ", end=" ")
+                print("  | #Boss ", end=" ")
             else:
-                print(f"| ({row}, {column})", end=" ")
+                print(f"  | ({row}, {column})", end=" ")
 
         print("|")
-    print("----------------------------------------------")
+    print("  ------------------------------------------------------")
 
 
 def validate_move(board, character, direction):

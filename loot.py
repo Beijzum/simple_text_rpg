@@ -1,6 +1,7 @@
 from utility import (
     clear,
-    draw_box
+    draw_box,
+    draw,
 )
 
 
@@ -48,6 +49,7 @@ def add_inventory(character, item_name, item_power, item_quantity, item_type, it
 
 
 def battle_rewards(character, foe):
+    draw()
     print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
     character["Experience Points"] += foe['Experience Points']
     print(f"You gained {foe['Experience Points']} experience points!")
@@ -83,8 +85,8 @@ def visit_shop(character):
     """
     """
     print("Welcome to the Shop!")
-
     while True:
+        draw()
         print("1. Buy Weapon")
         print("2. Buy Armour")
         print("3. Buy Potions")
@@ -96,7 +98,9 @@ def visit_shop(character):
 
         if choice == "1":  # Buying a weapon
             clear()
+            draw()
             print(f"1. Iron Sword $10\n2. Steel Sword $30\n3. Obsidian Blade $75\n4. Runic Greatsword $150")
+            draw()
             weapon_choice = input("Enter the number of the weapon you want to buy: ")
 
             if weapon_choice == "1":
@@ -121,33 +125,40 @@ def visit_shop(character):
 
             else:
                 clear()
+                draw()
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < weapon_cost:
                 clear()
+                draw()
                 print("Not enough gold to buy the weapon.")
 
             elif any(item.get('Name') == weapon_name for item in character['Inventory'].values()):
                 clear()
+                draw()
                 print(f"You already have {weapon_name} in your inventory.")
                 continue
 
             elif any(value['Power'] >= weapon_power for value in character['Inventory'].values() if
                      value['Type'] == 'Weapon'):
                 clear()
+                draw()
                 print("\"You already have a powerful weapon!\"")
                 continue
 
             else:
                 clear()
+                draw()
                 print(f"You bought {weapon_name}!")
                 character['Gold'] -= weapon_cost
                 add_equipment(character, weapon_name, weapon_power, "Weapon")
 
         elif choice == "2":  # Buying armour
             clear()
+            draw()
             print(f"1. Leather Armour $10\n2. Iron Armour $30\n3. Steel Armour $75\n4. Dragon Scale Armour $150")
+            draw()
             armour_choice = input("Enter the number of the armour you want to buy: ")
 
             if armour_choice == "1":
@@ -172,33 +183,40 @@ def visit_shop(character):
 
             else:
                 clear()
+                draw()
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < armour_cost:
                 clear()
+                draw()
                 print("Not enough gold to buy the armour.")
 
             elif any(item.get('Name') == armour_name for item in character['Inventory'].values()):
                 clear()
+                draw()
                 print(f"You already have {armour_name} in your inventory.")
                 continue
 
             elif any(value['Power'] >= armour_power for value in character['Inventory'].values() if
                      value['Type'] == 'Armour'):
                 clear()
+                draw()
                 print("\"You already have a magnificent suit of armour!\"")
                 continue
 
             else:
                 clear()
+                draw()
                 print(f"You bought {armour_name}!")
                 character['Gold'] -= armour_cost
                 add_equipment(character, armour_name, armour_power, "Armour")
 
         elif choice == "3":
             clear()
+            draw()
             print("1. Health Potion $5\n2. AP Potion $10")
+            draw()
             potion_choice = input("Enter the number of the potion you want to buy: ")
 
             if potion_choice == "1":
@@ -213,21 +231,25 @@ def visit_shop(character):
 
             else:
                 clear()
+                draw()
                 print("Invalid choice. Please enter a valid option.")
                 continue
 
             if character['Gold'] < potion_cost:
                 clear()
+                draw()
                 print("Not enough gold to buy the potion.")
 
             else:
                 clear()
+                draw()
                 print(f"You bought a {potion_name}!")
                 character['Gold'] -= potion_cost
                 add_inventory(character, potion_name, potion_power, 1, "Consumable")
 
         elif choice == "4":
             clear()
+            draw()
             print("\"What are you selling, stranger?\"")
             miscellaneous_items = [(key, value) for key, value in character['Inventory'].items()
                                    if value.get('Type') == 'Miscellaneous']
@@ -247,6 +269,7 @@ def visit_shop(character):
 
         elif choice == "5":
             clear()
+            draw()
             if character['Gold'] < 15:
                 print("\"You don't have enough gold to rest.\"")
                 continue
@@ -260,11 +283,13 @@ def visit_shop(character):
 
         elif choice == "6":
             clear()
+            draw()
             print(f"\"Thanks for visiting the Shop! Come again.\"")
             break
 
         else:
             clear()
+            draw()
             print("Invalid choice. Please choose a valid option (1, 2, 3, or 4).")
 
     return character

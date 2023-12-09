@@ -1,6 +1,6 @@
 import random
 from itertools import cycle
-from utility import clear
+from utility import clear, draw
 
 
 def enemy_attack(character, foe):
@@ -49,11 +49,13 @@ def use_item(character, item_key):
 
         if selected_item['Quantity'] <= 0:
             clear()
+            draw()
             print(f"You don't have any {selected_item['Name']} left.")
             return False
 
         if "Health Potion" in selected_item["Name"]:
             clear()
+            draw()
             # Will add the lowest amount to character health. If character is already at max HP, nothing will be added.
             healing_amount = min(selected_item["Power"], character['Max HP'] - character['Current HP'])
             character['Current HP'] += healing_amount
@@ -64,6 +66,7 @@ def use_item(character, item_key):
 
         elif "AP Potion" in selected_item["Name"]:
             clear()
+            draw()
             # Will add the lowest amount to character AP. If character is already at max AP, nothing will be added.
             ap_amount = min(selected_item["Power"], character['Max AP'] - character['Ability Points'])
             character['Ability Points'] += ap_amount
@@ -74,10 +77,12 @@ def use_item(character, item_key):
 
         print(f"You can't use {selected_item['Name']} in combat.")
         clear()
+        draw()
         return False
 
     except KeyError:
         clear()
+        draw()
         print("Invalid item selection.")
         return False
 
