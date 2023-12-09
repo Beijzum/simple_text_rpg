@@ -9,7 +9,7 @@ def enemy_attack(character, foe):
     # If the foe has a special ability and is below half health
     if 'Special Ability' in foe and foe['Current HP'] < foe['Max HP'] / 2 and foe['Special Ability Counter'] == 0:
 
-        foe_special_ability_name = next(iter(foe['Special Ability']))
+        foe_special_ability_name = next(iter(foe['Special Ability'].keys()))
         foe_special_ability = foe['Special Ability'][foe_special_ability_name]
         ability_power = foe_special_ability.get('Power')
         foe_attack = foe['Attack'] + random.randint(-1, 1)
@@ -19,12 +19,13 @@ def enemy_attack(character, foe):
         foe['Special Ability Counter'] += 1
         print(f"{foe_special_ability.get('Description')}")
         print(f"Your Radiant Blade and Guardian Armour are reacting to the {foe['Name']}'s special ability!")
+        print(f"You are able to withstand its manipulation of time!")
         print(f"Your special items mitigate {foe_special_ability_name} and it only deals {total_damage} damage!")
-        print(f"You sense that the creature is weakening.")
+        print(f"You sense that the {foe['Name']} is nearing defeat.")
 
     # 25% to use ability
     elif random.random() < 0.25 and 'Ability' in foe:
-        foe_ability_name = next(iter(foe['Ability']))
+        foe_ability_name = random.choice(list(foe['Ability'].keys()))
         foe_ability = foe['Ability'][foe_ability_name]
         ability_power = foe_ability.get('Power')
         foe_attack = foe['Attack'] + random.randint(-1, 1)
