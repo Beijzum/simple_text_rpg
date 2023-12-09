@@ -1,4 +1,7 @@
-from utility import clear
+from utility import (
+    clear,
+    draw_box
+)
 
 
 def add_equipment(character, item_name, item_power, item_type):
@@ -59,7 +62,7 @@ def battle_rewards(character, foe):
         item_price = item_info.get('Price', 0)
 
         if item_type == 'Special':
-            print(f"You obtained a special item: {item_name}!")
+            print(draw_box(f"You obtained a special item: {item_name}!"))
             add_inventory(character, item_name, 0, 1, item_type)
 
         elif item_type == 'Miscellaneous':
@@ -68,11 +71,11 @@ def battle_rewards(character, foe):
 
         elif item_type == 'Equipment':
             if item_name == "Radiant Blade":
-                print(f"You obtained a special weapon: {item_name}!")
+                print(draw_box(f"You obtained a special weapon: {item_name}!"))
                 add_equipment(character, item_name, 10, "Weapon")
 
             elif item_name == "Guardian Armour":
-                print(f"You obtained special armor: {item_name}!")
+                print(draw_box(f"You obtained special armor: {item_name}!"))
                 add_equipment(character, item_name, 6, "Armour")
 
 

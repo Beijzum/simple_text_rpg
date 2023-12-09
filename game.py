@@ -36,7 +36,10 @@ from loot import (
     battle_rewards,
     visit_shop,
 )
-from utility import clear
+from utility import (
+    clear,
+    draw_box,
+)
 
 
 def start_menu():
@@ -45,7 +48,7 @@ def start_menu():
     """
 
     while True:
-        print("The Quest For The Chocolate Orb!")
+        print(draw_box("The Quest For The Chocolate Orb! "))
         print("1. Start a New Game")
         print("2. Load Game")
         print("3. Quit")
