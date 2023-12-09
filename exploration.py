@@ -245,7 +245,7 @@ def check_stronger_foe(character):
 
     if frozen_orb_found and flame_orb_found and not character['Stronger Enemies']:
         character['Stronger Enemies'] = True
-        print(draw_box("You sense a stronger presence of enemies in the dungeon."))
+        print(draw_box("You sense the presence of stronger enemies in the dungeon."))
         return True
     else:
         return False

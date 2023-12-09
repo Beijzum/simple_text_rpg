@@ -351,6 +351,7 @@ def game(character=None):
     while not achieved_goal:
         direction = get_user_choice(rows, columns, character, board)
         valid_move = validate_move(board, character, direction)
+        achieved_goal = check_win_condition(board, character)
 
         if valid_move:
             clear()
