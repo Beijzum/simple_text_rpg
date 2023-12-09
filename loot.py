@@ -6,6 +6,38 @@ from utility import (
 
 
 def add_equipment(character, item_name, item_power, item_type):
+    """
+    Equip the character with a new weapon or armour.
+
+    This function checks if the character already has the item in their inventory. If they do, the function will return.
+    If the character does not have the item, the function will check if the item is a weapon or armour. If it is, the
+    function will replace the existing weapon or armour in the character's inventory with the new item and adjust the
+    character's attack or defence stat accordingly.
+
+    :param character: a dictionary representing the player character
+    :param item_name: a string representing the name of the item.
+    :param item_power: an integer representing the power of the item.
+    :param item_type: a string representing the type of the item ("Weapon" or "Armour").
+    :precondition: character must be a dictionary with stats and an inventory.
+    :precondition: item_name must be a string.
+    :precondition: item_power must be an integer.
+    :precondition: item_type must be a string and either "Weapon" or "Armour".
+    :precondition: character must have more than 0 health.
+    :postcondition: prints the status of the item added, replaced, or already in the inventory.
+    :postcondition: updates the character's inventory and stats based on the item added.
+    :return: a string representing the description of the item added, replaced, or already in the inventory.
+    :return: an updated character dictionary.
+
+    >>> character_test = {"Inventory": {"1": {"Name": "Bronze Sword", "Power": 1, "Type": "Weapon"}},\
+ "Attack": 1, "Defence": 0}
+    >>> add_equipment(character_test, "Iron Sword", 2, "Weapon")
+    Replacing Bronze Sword with Iron Sword in your inventory.
+
+    >>> character_test = {"Inventory": {"1": {"Name": "Bronze Sword", "Power": 1, "Type": "Weapon"}},\
+ "Attack": 1, "Defence": 0}
+    >>> add_equipment(character_test, "Bronze Sword", 1, "Weapon")
+    You already have Bronze Sword in your inventory.
+    """
     for key, value in character['Inventory'].items():
         if value['Name'] == item_name:
             print(f"You already have {item_name} in your inventory.")
@@ -27,6 +59,39 @@ def add_equipment(character, item_name, item_power, item_type):
 
 
 def add_inventory(character, item_name, item_power, item_quantity, item_type, item_price=0):
+    """
+    Add an item to the character's inventory.
+
+    This function checks if the character already has the item in their inventory. If they do, the function will return.
+    If the character does not have the item, the function will add the item to the character's inventory.
+
+    :param character: a dictionary representing the player character
+    :param item_name: a string representing the name of the item.
+    :param item_power: an integer representing the power of the item.
+    :param item_quantity: an integer representing the quantity of the item.
+    :param item_type: a string representing the type of the item
+    :param item_price: an optional integer representing the price of the item. Default is 0.
+    :precondition: character must be a dictionary with an 'Inventory' key.
+    :precondition: item_name must be a string.
+    :precondition: item_power must be an integer.
+    :precondition: item_quantity must be an integer.
+    :precondition: item_type must be a string and either "Special", "Consumable", or "Miscellaneous".
+    :precondition: item_price must be an integer.
+    :precondition: character must have more than 0 health.
+    :postcondition: prints the status of the item added or already in the inventory.
+    :postcondition: updates the character's inventory based on the item added.
+    :return: a string representing the description of the item added or already in the inventory.
+    :return: an updated character dictionary.
+
+    >>> character_test = {"Inventory": {"1": {"Name": "Health Potion", "Power": 15,\
+"Quantity": 1, "Type": "Consumable"}}}
+    >>> add_inventory(character_test, "Health Potion", 15, 1, "Consumable")
+    You added 1 Health Potion(s) to your inventory!
+
+    >>> character_test = {"Inventory": {"1": {"Name": "Frozen Orb", "Power": 0, "Quantity": 1, "Type": "Special"}}}
+    >>> add_inventory(character_test, "Frozen Orb", 0, 1, "Special")
+    You already have Frozen Orb in your inventory.
+    """
     for key, value in character['Inventory'].items():
         if value['Name'] == item_name and value['Type'] == "Special":
             print(f"You already have {item_name} in your inventory.")
@@ -49,6 +114,47 @@ def add_inventory(character, item_name, item_power, item_quantity, item_type, it
 
 
 def battle_rewards(character, foe):
+    """
+    Handle the rewards after a battle.
+
+    This function calculates the rewards after a battle, including gold and experience points. It also checks the foe's
+    loot for any special items, miscellaneous items, or equipment, and adds them to the character's inventory.
+
+    :param character: a dictionary representing the player character
+    :param foe: a dictionary representing the foe
+    :precondition: character must be a dictionary with stats and an inventory.
+    :precondition: foe must be a dictionary with stats and loot.
+    :precondition: character must have more than 0 health.
+    :precondition: foe must have equal to or less than 0 health.
+    :postcondition: updates the character's experience points and gold based on the foe's rewards.
+    :postcondition: updates the character's inventory based on the foe's loot.
+    :return: a string representing the description of the rewards.
+    :return: an updated character dictionary.
+
+    >>> character_test = {"Experience Points": 0, "Gold": 0, "Inventory": {}}
+    >>> foe_test = {"Name": "Orc", "Gold": 10, "Experience Points": 10,\
+ "Loot": {"Cheap Trinket": {"Price": 8, "Type": "Miscellaneous"}}}
+    >>> battle_rewards(character_test, foe_test)
+    xX------------------------------------------------------Xx
+    You defeated the Orc and earned 10 gold!
+    You gained 10 experience points!
+    Your total gold is now 10.
+    You obtained a sellable miscellaneous item: Cheap Trinket!
+    You added 1 Cheap Trinket(s) to your inventory!
+
+    >>> character_test = {"Experience Points": 0, "Gold": 0, "Inventory": {}}
+    >>> foe_test = {"Name": "Ice Guardian", "Gold": 50, "Experience Points": 50,\
+    "Loot": {"Frozen Orb": {"Type": "Special"}}}
+    >>> battle_rewards(character_test, foe_test)
+    xX------------------------------------------------------Xx
+    You defeated the Ice Guardian and earned 50 gold!
+    You gained 50 experience points!
+    Your total gold is now 50.
+    +▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔+
+    |  You obtained a special item: Frozen Orb!  |
+    +▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁+
+    You added 1 Frozen Orb(s) to your inventory!
+    """
     draw()
     print(f"You defeated the {foe['Name']} and earned {foe['Gold']} gold!")
     character["Experience Points"] += foe['Experience Points']
@@ -83,6 +189,18 @@ def battle_rewards(character, foe):
 
 def visit_shop(character):
     """
+    Visit the traveling merchant to buy weapons, armour, potions, sell items, or rest.
+
+    This function allows the character to interact with the traveling merchant. The character can buy weapons, armour,
+    and potions, sell miscellaneous items, or rest to recover health and ability points. The character's gold is used
+    to buy items and rest, and is gained by selling items.
+
+    :param character: a dictionary representing the player character
+    :precondition: character must be a dictionary with stats and an inventory.
+    :precondition: character must have more than 0 health.
+    :postcondition: prints the status of the item added or already in the inventory.
+    :postcondition: updates the character's stats, gold, and inventory based on the actions taken in the shop.
+    :return: the updated character dictionary.
     """
     print("Welcome to the Shop!")
     while True:

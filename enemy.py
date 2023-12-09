@@ -32,6 +32,8 @@ def generate_foe():
     """
     Generate a random foe from a list of possible foes.
 
+    This function will be called when the character encounters a foe.
+
     :param: N/A
     :precondition: character must be alive with greater than 0 HP
     :postcondition: generates a random foe from a list of possible foes
@@ -207,6 +209,9 @@ def generate_stronger_foe():
 def generate_special_foe(board, character):
     """
     Generate a special foe based on the character's current location on the board.
+
+    This function will be called when the character enters a special room. The special foe will be generated based on
+    the character's current location on the board and inventory.
 
     :param board: a dictionary with the board's layout and coordinates
     :param character: a dictionary with character stats

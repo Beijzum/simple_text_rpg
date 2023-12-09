@@ -20,6 +20,8 @@ def enemy_attack(character, foe):
     :param foe: a dictionary representing the enemy
     :precondition: character must be a dictionary with stats.
     :precondition: foe must be a dictionary with stats and a name.
+    :precondition: character must greater than 0 health.
+    :precondition: foe must have greater than 0 health
     :postcondition: updates the character's 'Current HP' based on the foe's attack
     :postcondition: prints the foe's attack and damage dealt
     :return: a string representing the description of the foe's attack and damage dealt
@@ -87,6 +89,8 @@ def use_item(character, item_key):
     :param item_key: a string representing the key of the item in the character's inventory.
     :raises: KeyError if the item_key is not in the character's inventory.
     :precondition: character must be a dictionary with an inventory.
+    :precondition: character must greater than 0 health.
+    :precondition: foe must have greater than 0 health
     :precondition: item_key must be a string and a valid key in the character's 'Inventory'.
     :postcondition: updates the character's stats based on the item used
     :postcondition: prints the item used and the effect
@@ -152,21 +156,22 @@ def use_item(character, item_key):
 
 def multi_strike(power):
     """
-    Calculate the hits and total power of the multi-strike ability.
+    Calculate the hits and total power of the 'Multi-Strike' ability.
 
-    This function calculates the number of hits and total power for the multi-strike ability.
-    The number of hits is determined randomly: there's a 30% chance for the attack to hit 3, 4, or 5 times,
-    and a 70% chance for the attack to hit 2 times. The total power of the attack is the product of the
+    This function calculates the number of hits and total power for the 'Multi-Strike' ability.
+    The number of hits is determined randomly: there's a 30% chance for the ability to hit 3, 4, or 5 times,
+    and a 70% chance for the ability to hit 2 times. The total power of the ability is the product of the
     number of hits and the power parameter.
 
-    :param power: an integer representing the base power of the attack
+    :param power: an integer representing the base power of the ability
+    :precondition: power must be a positive integer
     :precondition: character must have a 'Multi-Strike' ability
     :precondition: character must have enough AP to use the ability
     :precondition: character must have greater than 0 health
-    :precondition: power must be a positive integer
+    :precondition: foe must have greater than 0 health
     :postcondition: prints the number of hits
-    :postcondition: calculates the total power of the attack
-    :return: an integer representing the total power of the multi-strike attack
+    :postcondition: calculates the total power of the ability
+    :return: an integer representing the total power of the 'Multi-Strike' ability
     :return: the number of hits
 
     >>> multi_strike(2)
