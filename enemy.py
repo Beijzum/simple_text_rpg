@@ -42,7 +42,7 @@ def generate_foe():
             "Current HP": 6,
             "Defence": 1,
             "Gold": 10,
-            "Experience Points": 15,
+            "Experience Points": 10,
             "Loot": {
                 "Cheap Trinket": {"Price": 8, "Type": "Miscellaneous"},
             }
@@ -168,8 +168,8 @@ def generate_special_foe(board, character):
             "Ability": {
                 "Snowball": {"Power": 4, "Description": "The Abominable Snowman throws a giant snowball at you!"},
             },
-            "Gold": 50,
-            "Experience Points": 50,
+            "Gold": 30,
+            "Experience Points": 30,
             "Loot": {
                 "Frozen Orb": {"Type": "Special"},
             }
@@ -184,8 +184,8 @@ def generate_special_foe(board, character):
             "Ability": {
                 "Flame Breath": {"Power": 4, "Description": "The Dragon unleashes a fiery breath!"},
             },
-            "Gold": 100,
-            "Experience Points": 50,
+            "Gold": 40,
+            "Experience Points": 40,
             "Loot": {
                 "Flame Orb": {"Type": "Special"},
             }

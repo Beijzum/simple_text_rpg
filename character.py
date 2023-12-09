@@ -27,7 +27,7 @@ def make_character():
             "1": {"Name": "Bronze Sword", "Power": 0, "Type": "Weapon"},
             "2": {"Name": "Clothes", "Power": 0, "Type": "Armour"},
         },
-        "Gold": 100,
+        "Gold": 0,
         "Level": 1,
         "Experience Points": 0,
         "EXP to Level Up": 10,
