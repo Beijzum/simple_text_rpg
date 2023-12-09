@@ -284,7 +284,8 @@ def check_stronger_foe(character):
     :postcondition: changes 'Stronger Enemies' to True if both special items are found in the inventory.
     :return: changes 'Stronger Enemies' to True and prints a message if both special items are found in the inventory.
 
-    >>> character_test = {"Inventory": {"1": {"Name": "Frozen Orb"}, "2": {"Name": "Flame Orb"}}, "Stronger Enemies": False}
+    >>> character_test = {"Inventory": {"1": {"Name": "Frozen Orb"}, "2": {"Name": "Flame Orb"}},\
+"Stronger Enemies": False}
     >>> check_stronger_foe(character_test)
     +▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔+
     |  You sense the presence of stronger enemies in the dungeon.  |
