@@ -74,7 +74,7 @@ def generate_foe():
 
 
 def generate_stronger_foe():
-    foe_types = ["Hobgoblin", "High Orc", "Armoured Skeleton", "Draugr", "Wyvern"]
+    foe_types = ["Hobgoblin", "High Orc", "Iron-Clad Skeleton", "Draugr", "Wyvern"]
     random_foe = random.choice(foe_types)
 
     if random_foe == "Hobgoblin":
