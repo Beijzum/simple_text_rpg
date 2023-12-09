@@ -29,6 +29,11 @@ def draw_box(message: str) -> str:
     :precondition: message must be a string
     :postcondition: prints a message enclosed in a box
     :return: a string representing the message enclosed in a box.
+
+    >>> print(draw_box("Hello, World!"))
+    +▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔+
+    |  Hello, World!  |
+    +▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁+
     """
     length = len(message) + 4
     top_border = "+" + "\u2594" * length + "+"
