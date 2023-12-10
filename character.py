@@ -1,3 +1,9 @@
+"""
+Jason Chow
+A00942129
+"""
+
+
 def make_character():
     """
     Create a character when invoking this function.

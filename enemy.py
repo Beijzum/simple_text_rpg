@@ -1,3 +1,7 @@
+"""
+Jason Chow
+A00942129
+"""
 import random
 from unittest.mock import patch
 

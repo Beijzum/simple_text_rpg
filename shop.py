@@ -1,3 +1,7 @@
+"""
+Jason Chow
+A00942129
+"""
 from loot import (
     add_equipment,
     add_inventory

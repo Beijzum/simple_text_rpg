@@ -1,3 +1,7 @@
+"""
+Jason Chow
+A00942129
+"""
 from character import is_alive
 from combat import (
     enemy_attack,
