@@ -12,6 +12,14 @@ A00942129
 
 Beijzum
 
+## Why did I choose this project?
+
+The story of the game is about a young traveller who has lost something precious to the flow of time. He must travel
+into the dungeon to retrieve it.
+
+I really liked Christopher Nolan films like Inception and Interstellar. I wanted to make a game that had a similar
+theme of time and loss.
+
 ## Instructions
 
 - Use `python3 game.py` to start the game.

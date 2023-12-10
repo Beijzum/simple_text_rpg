@@ -367,6 +367,9 @@ def game(character=None):
             draw()
             print(f"You have defeated the Time Warden!")
             print("Congratulations, you have obtained the Orb of Time!")
+            print("What will you do now?")
+            print("Will you ask the Orb of Time to give you the power to change the past?")
+            print("Or will you ask the Orb of Time to give you the power to change the future?")
             break
 
 
