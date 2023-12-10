@@ -1,3 +1,7 @@
+"""
+Jason Chow
+A00942129
+"""
 from unittest import TestCase
 from unittest.mock import patch
 from utility import clear
