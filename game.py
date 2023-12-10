@@ -5,7 +5,6 @@ A00942129
 import json
 import sys
 from unittest.mock import patch
-from itertools import count
 from character import (
     get_character_inventory,
     get_character_stats,
