@@ -47,6 +47,6 @@ Best played in Terminal due to the clear() function.
 | Random Module             | ![img_6.png](readme_pics/img_6.png)<br/>check_for_foes() in enemy.py             |
 | Function Annotations      | ![img_14.png](readme_pics/img_14.png)<br/>draw_box() in utility.py               |
 | Doctests & Unit Tests     | ![img_20.png](readme_pics/img_20.png)<br/>Tests folder                           |
-| F-String Usage            | ![img_21.png](readme_pics/img_21.png)<br/>enemy_attack() in combat.py            |
+| F-String Usage            | ![img_21.png](readme_pics/img_21.png)<br/>enemy_attack() in combat.py            |        
 
 ## Notes:

@@ -333,7 +333,7 @@ def visit_shop(character):
         elif choice == "3":
             clear()
             draw()
-            print("1. Health Potion $5\n2. AP Potion $10")
+            print("1. Health Potion $10\n2. AP Potion $10")
             draw()
             potion_choice = input("Enter the number of the potion you want to buy: ")
 

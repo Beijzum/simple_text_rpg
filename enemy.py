@@ -42,12 +42,12 @@ def generate_foe():
     >>> with patch('random.choice', return_value='Goblin'):
     ...     generate_foe()
     {'Name': 'Goblin', 'Attack': 1, 'Current HP': 3, 'Defence': 0, 'Gold': 5, 'Experience Points': 5,\
- 'Loot': {'Cheap Trinket': {'Price': 8, 'Type': 'Miscellaneous'}}}
+ 'Loot': {'Cheap Trinket': {'Price': 10, 'Type': 'Miscellaneous'}}}
 
     >>> with patch('random.choice', return_value='Orc'):
     ...     generate_foe()
     {'Name': 'Orc', 'Attack': 2, 'Current HP': 6, 'Defence': 1, 'Gold': 10, 'Experience Points': 10,\
- 'Loot': {'Cheap Trinket': {'Price': 8, 'Type': 'Miscellaneous'}}}
+ 'Loot': {'Cheap Trinket': {'Price': 10, 'Type': 'Miscellaneous'}}}
     """
     foe_types = ["Goblin", "Orc", "Skeleton", "Ghoul"]
     random_foe = random.choice(foe_types)
@@ -61,7 +61,7 @@ def generate_foe():
             "Gold": 5,
             "Experience Points": 5,
             "Loot": {
-                "Cheap Trinket": {"Price": 8, "Type": "Miscellaneous"},
+                "Cheap Trinket": {"Price": 10, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "Orc":
@@ -73,7 +73,7 @@ def generate_foe():
             "Gold": 10,
             "Experience Points": 10,
             "Loot": {
-                "Cheap Trinket": {"Price": 8, "Type": "Miscellaneous"},
+                "Cheap Trinket": {"Price": 10, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "Skeleton":
@@ -85,7 +85,7 @@ def generate_foe():
             "Gold": 5,
             "Experience Points": 5,
             "Loot": {
-                "Cheap Trinket": {"Price": 8, "Type": "Miscellaneous"},
+                "Cheap Trinket": {"Price": 10, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "Ghoul":
@@ -97,7 +97,7 @@ def generate_foe():
             "Gold": 5,
             "Experience Points": 10,
             "Loot": {
-                "Cheap Trinket": {"Price": 8, "Type": "Miscellaneous"},
+                "Cheap Trinket": {"Price": 10, "Type": "Miscellaneous"},
             }
         }
 
@@ -118,13 +118,13 @@ def generate_stronger_foe():
     ...     generate_stronger_foe()
     {'Name': 'Hobgoblin', 'Attack': 5, 'Current HP': 8, 'Defence': 1, 'Ability': {'Reckless Attack': {'Power': 2,\
  'Description': 'The Hobgoblin is charging at you!'}}, 'Gold': 10, 'Experience Points': 10,\
- 'Loot': {'Rare Relic': {'Price': 16, 'Type': 'Miscellaneous'}}}
+ 'Loot': {'Rare Relic': {'Price': 20, 'Type': 'Miscellaneous'}}}
 
     >>> with patch('random.choice', return_value='High Orc'):
     ...     generate_stronger_foe()
     {'Name': 'High Orc', 'Attack': 7, 'Current HP': 16, 'Defence': 2, 'Ability': {'Spear Throw': {'Power': 4,\
  'Description': 'The High Orc aims its spear at you!'}}, 'Gold': 20, 'Experience Points': 20,\
- 'Loot': {'Rare Relic': {'Price': 16, 'Type': 'Miscellaneous'}}}
+ 'Loot': {'Rare Relic': {'Price': 20, 'Type': 'Miscellaneous'}}}
     """
     foe_types = ["Hobgoblin", "High Orc", "Iron-Clad Skeleton", "Draugr", "Wyvern"]
     random_foe = random.choice(foe_types)
@@ -141,7 +141,7 @@ def generate_stronger_foe():
             "Gold": 10,
             "Experience Points": 10,
             "Loot": {
-                "Rare Relic": {"Price": 16, "Type": "Miscellaneous"},
+                "Rare Relic": {"Price": 20, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "High Orc":
@@ -156,7 +156,7 @@ def generate_stronger_foe():
             "Gold": 20,
             "Experience Points": 20,
             "Loot": {
-                "Rare Relic": {"Price": 16, "Type": "Miscellaneous"},
+                "Rare Relic": {"Price": 20, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "Iron-Clad Skeleton":
@@ -171,7 +171,7 @@ def generate_stronger_foe():
             "Gold": 10,
             "Experience Points": 20,
             "Loot": {
-                "Rare Relic": {"Price": 16, "Type": "Miscellaneous"},
+                "Rare Relic": {"Price": 20, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "Draugr":
@@ -186,7 +186,7 @@ def generate_stronger_foe():
             "Gold": 10,
             "Experience Points": 20,
             "Loot": {
-                "Rare Relic": {"Price": 16, "Type": "Miscellaneous"},
+                "Rare Relic": {"Price": 20, "Type": "Miscellaneous"},
             }
         }
     elif random_foe == "Wyvern":
@@ -201,7 +201,7 @@ def generate_stronger_foe():
             "Gold": 20,
             "Experience Points": 30,
             "Loot": {
-                "Rare Relic": {"Price": 16, "Type": "Miscellaneous"},
+                "Rare Relic": {"Price": 20, "Type": "Miscellaneous"},
             }
         }
 

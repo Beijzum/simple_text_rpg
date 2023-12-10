@@ -1,10 +1,10 @@
 import random
-from itertools import cycle
 from utility import (
     clear,
     draw,
 )
 from unittest.mock import patch
+from itertools import repeat
 
 
 def enemy_attack(character, foe):
@@ -174,22 +174,29 @@ def multi_strike(power):
     :return: an integer representing the total power of the 'Multi-Strike' ability
     :return: the number of hits
 
-    >>> multi_strike(2)
+
+    >>> with patch('random.random', return_value=0.8):
+    ...     multi_strike(2)
+    You swing your weapon!
     Your attack hits 2 times!
     4
 
-    >>> with patch('random.random', return_value=0.2):
+    >>> with patch('random.random', return_value=0.2), patch('random.randint', return_value=4):
     ...     multi_strike(2)
-    Your attack hits 3 times!
-    6
+    You swing your weapon!
+    You swing your weapon!
+    You swing your weapon!
+    You swing your weapon!
+    Your attack hits 4 times!
+    8
     """
-    multipliers = [3, 4, 5]
-    multipliers_cycle = cycle(multipliers)
-
     if random.random() < 0.3:
-        hits = next(multipliers_cycle)
-        print(f"Your attack hits {hits} times!")
-        return power * hits
+        hit_number = random.randint(3, 5)
+        hits = repeat(f"You swing your weapon!", hit_number)
+        print(*hits, sep='\n')
+        print(f"Your attack hits {hit_number} times!")
+        return power * hit_number
     else:
+        print(f"You swing your weapon!")
         print("Your attack hits 2 times!")
         return power * 2

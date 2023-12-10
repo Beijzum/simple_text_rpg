@@ -4,7 +4,8 @@ A00942129
 """
 import json
 import sys
-
+from unittest.mock import patch
+from itertools import count
 from character import (
     get_character_inventory,
     get_character_stats,
@@ -46,6 +47,12 @@ from utility import (
 def start_menu():
     """
     Display the start menu with a choice of starting a new game, loading a game, or quitting.
+
+    :param: N/A
+    :precondition: user must start the program
+    :postcondition: displays the start menu and prompts the user to make a choice
+    :postcondition: calls the game function, load_game function, or exits the program
+    :return: a call to the game function, load_game function, or exits the program
     """
 
     while True:
@@ -81,6 +88,18 @@ def start_menu():
 def save_game(character):
     """
     Save the current game state to a JSON file.
+
+    This function takes the current game state, represented by the character dictionary, and saves it to a JSON file.
+    The JSON file is named "save.json" and is saved in the same directory as the game.py file. The JSON file is
+    formatted with indentation of 4 spaces.
+
+    :param character: a dictionary representing the current game state.
+    :precondition: character must be a valid dictionary.
+    :precondition: character must be alive with greater than 0 HP.
+    :postcondition: saves the game state to a JSON file.
+    :postcondition: prints a message to the console indicating that the game was saved successfully.
+    :return: a JSON file named "save.json" containing the current game state.
+    :return: a string indicating that the game was saved successfully.
     """
     with open("save.json", "w") as game_file:
         json.dump(character, game_file, indent=4)
@@ -91,6 +110,17 @@ def save_game(character):
 def load_game():
     """
     Load an existing game and continue.
+
+    This function loads a saved game state from a JSON file named "save.json".
+
+
+    :param: N/A
+    :precondition: "save.json" file should exist if there is a saved game.
+    :precondition: "save.json" file should be formatted correctly.
+    :postcondition: loads the game state from the JSON file.
+    :postcondition: prints a message to the console indicating that the game was loaded successfully.
+    :return: a call to the game function.
+    :return: a string indicating that the game was loaded successfully.
     """
     try:
         with open("save.json", "r") as game_file:
@@ -114,6 +144,29 @@ def get_user_choice(rows, columns, character, board):
     :precondition: character must not be in the winning room
     :postcondition: prompts user to choose a direction and returns the input as a string
     :return: returns a string consisting of "up", "down", "left", or "right"
+
+    >>> character_test = {"X-coordinate": 0, "Y-coordinate": 0}
+    >>> with patch('builtins.input', return_value='2'):
+    ...     get_user_choice(5, 5, character_test, {(0, 0): "Starting Room"})
+    xX------------------------------------------------------Xx
+    1. Up
+    2. Down
+    3. Left
+    4. Right
+    xX------------------------------------------------------Xx
+    You chose to go down...
+    'down'
+
+    >>> with patch('builtins.input', return_value='4'):
+    ...     get_user_choice(5, 5, character_test, {(0, 0): "Starting Room"})
+    xX------------------------------------------------------Xx
+    1. Up
+    2. Down
+    3. Left
+    4. Right
+    xX------------------------------------------------------Xx
+    You chose to go right...
+    'right'
     """
     while True:
         draw()
@@ -181,20 +234,19 @@ def get_user_choice(rows, columns, character, board):
 
 def combat_loop(character, foe):
     """
-    Conduct the combat loop between the character and a foe.
+    Handle the combat loop between the character and a foe.
 
     :param character: a non-empty dictionary representing the player character
     :param foe: a non-empty dictionary representing the foe
     :precondition: character must be alive with greater than 0 HP
     :precondition: foe must be alive with greater than 0 HP
     :postcondition: conducts the combat loop until either the character or the foe is defeated
-    :return: returns True if the character wins, otherwise False
-
-    # >>> combat_loop({'X-coordinate': 0, 'Y-coordinate': 0, 'Current HP': 5, 'Attack': 1, 'Armour': 0},
-    # ... {'Name': 'Goblin', 'Attack': 2, 'Current HP': 10},
-    # ... {(0, 0): "Starting Room", (1, 0): "Empty Room"})
-    # True
-    Dunno how to test yet. @patch?
+    :postcondition: prints the result of the combat loop
+    :postcondition: updates the character's inventory and experience points
+    :postcondition: calls the battle_rewards function
+    :postcondition: calls the level_up function if the conditions are met
+    :return: updates the character's inventory and experience points
+    :return: True if the character wins, otherwise False if the character loses
     """
     while is_alive(character) and is_alive(foe):
 
@@ -333,7 +385,20 @@ def combat_loop(character, foe):
 
 def game(character=None):
     """
-    Initialize the game
+    Initialize and run the game.
+
+    This function sets up the game board and character, then enters the main game loop. It will ask the player for
+    input to move the character around the board, and will call other functions to handle combat, inventory, and
+    other game mechanics. The game will end when the character's health drops to 0 or the win condition is met.
+
+    :param character: a dictionary representing the player character. If None, a new character is created.
+    :precondition: if the character is provided, must be a dictionary with stats and inventory.
+    :precondition: character must be alive with greater than 0 HP.
+    :postcondition: runs the game until the character's health drops to 0 or the win condition is met.
+    :postcondition: prints a message to the console indicating that the game is over.
+    :postcondition: prints a message to the console indicating that the character has won the game.
+    :return: a string indicating that the game is over.
+    :return: a string indicating that the character has won the game.
     """
     achieved_goal = False
 
