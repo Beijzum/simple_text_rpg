@@ -6,7 +6,6 @@ from character import get_character_stats
 
 
 class TestGetCharacterStats(TestCase):
-
     @patch("sys.stdout", new_callable=io.StringIO)
     def test_get_character_stats(self, mock_output):
         character = {
