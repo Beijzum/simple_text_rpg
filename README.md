@@ -14,6 +14,7 @@ Beijzum
 
 ## Instructions
 
+- Use `python3 game.py` to start the game.
 - Best played in Terminal due to the clear() function.
 - 1 , 2, 3, 4 are directions to move, and 5 shows the map.
 - 6 shows the character's stats, and 7 shows the character's inventory.
