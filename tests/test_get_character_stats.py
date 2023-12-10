@@ -47,3 +47,38 @@ class TestGetCharacterStats(TestCase):
                     "Your current Gold is 0.\n"
                     "Your current coordinates are (0,0).\n")
         self.assertEqual(actual, expected)
+
+    @patch("sys.stdout", new_callable=io.StringIO)
+    def test_get_character_stats_empty(self, mock_output):
+        character = {
+            "X-coordinate": 0,
+            "Y-coordinate": 0,
+            "Max HP": 0,
+            "Current HP": 0,
+            "Max AP": 0,
+            "Ability Points": 0,
+            "Attack": 0,
+            "Defence": 0,
+            "Abilities": {},
+            "Inventory": {},
+            "Gold": 0,
+            "Level": 0,
+            "Experience Points": 0,
+            "EXP to Level Up": 0,
+            "Stronger Enemies": False
+        }
+        get_character_stats(character)
+        actual = mock_output.getvalue()
+        expected = ("Your current Level is 0.\n"
+                    "Your current Max HP is 0.\n"
+                    "Your current HP is 0.\n"
+                    "Your current Max AP is 0.\n"
+                    "Your current Ability Points is 0.\n"
+                    "Your current Attack is 0.\n"
+                    "Your current Defence is 0.\n"
+                    "Your current Abilities are {}.\n"
+                    "Your current Experience Points is 0.\n"
+                    "Your current EXP to Level Up is 0.\n"
+                    "Your current Gold is 0.\n"
+                    "Your current coordinates are (0,0).\n")
+        self.assertEqual(actual, expected)

@@ -27,3 +27,13 @@ class TestGetCharacterInventory(TestCase):
                     "Item #3 {'Name': 'Health Potion', 'Power': 5, 'Quantity': 2, 'Type': 'Consumable'}.\n"
                     "Item #4 {'Name': 'Frozen Orb', 'Power': 0, 'Quantity': 1, 'Type': 'Special'}.\n")
         self.assertEqual(actual, expected)
+
+    @patch("sys.stdout", new_callable=io.StringIO)
+    def test_get_character_inventory_empty(self, mock_output):
+        character = {
+            "Inventory": {},
+        }
+        get_character_inventory(character)
+        actual = mock_output.getvalue()
+        expected = ""
+        self.assertEqual(actual, expected)
