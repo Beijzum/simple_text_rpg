@@ -4,7 +4,7 @@ A00942129
 """
 from unittest import TestCase
 from unittest.mock import patch
-from game import check_for_foes
+from enemy import check_for_foes
 
 
 class TestCheckForFoes(TestCase):

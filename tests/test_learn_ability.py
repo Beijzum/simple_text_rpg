@@ -1,3 +1,7 @@
+"""
+Jason Chow
+A00942129
+"""
 from unittest import TestCase
 from character import learn_ability
 

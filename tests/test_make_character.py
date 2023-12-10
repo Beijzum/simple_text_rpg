@@ -3,7 +3,7 @@ Jason Chow
 A00942129
 """
 from unittest import TestCase
-from game import make_character
+from character import make_character
 
 
 class TestMakeCharacter(TestCase):

@@ -3,7 +3,7 @@ Jason Chow
 A00942129
 """
 from unittest import TestCase
-from game import move_character
+from exploration import move_character
 
 
 class TestMoveCharacter(TestCase):

@@ -3,7 +3,7 @@ Jason Chow
 A00942129
 """
 from unittest import TestCase
-from game import is_alive
+from character import is_alive
 
 
 class TestIsAlive(TestCase):

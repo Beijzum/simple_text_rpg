@@ -3,7 +3,7 @@ Jason Chow
 A00942129
 """
 from unittest import TestCase
-from game import check_win_condition
+from exploration import check_win_condition
 
 
 class TestCheckWinCondition(TestCase):

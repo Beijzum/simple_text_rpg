@@ -5,7 +5,7 @@ A00942129
 import io
 from unittest import TestCase
 from unittest.mock import patch
-from game import describe_current_location
+from exploration import describe_current_location
 
 
 class TestDescribeCurrentLocation(TestCase):
@@ -52,4 +52,14 @@ class TestDescribeCurrentLocation(TestCase):
         describe_current_location(board, character)
         mock_destination = mock_output.getvalue()
         expected = "Empty Room (0, 1)\nYou see nothing interesting in this room.\n"
+        self.assertEqual(expected, mock_destination)
+
+    @patch("sys.stdout", new_callable=io.StringIO)
+    def test_describe_boss_room(self, mock_output):
+        board = {(0, 0): "Treasure Room", (0, 1): "Empty Room", (1, 0): "Dark Room", (1, 1): "Boss Room"}
+        character = {"X-coordinate": 1, "Y-coordinate": 1, "Inventory": {}}
+        describe_current_location(board, character)
+        mock_destination = mock_output.getvalue()
+        expected = "Boss Room (1, 1)\nYou sense a powerful dimensional anomaly in this area.\n" \
+                   "You must find the two special items to overcome this challenge.\n"
         self.assertEqual(expected, mock_destination)

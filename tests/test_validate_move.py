@@ -3,7 +3,7 @@ Jason Chow
 A00942129
 """
 from unittest import TestCase
-from game import validate_move
+from exploration import validate_move
 
 
 class TestValidateMove(TestCase):

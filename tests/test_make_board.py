@@ -4,7 +4,7 @@ A00942129
 """
 from unittest import TestCase
 from unittest.mock import patch
-from game import make_board
+from exploration import make_board
 
 
 class TestMakeBoard(TestCase):
