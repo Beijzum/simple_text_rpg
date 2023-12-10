@@ -41,7 +41,7 @@ def enemy_attack(character, foe):
     The High Orc uses Spear Throw and deals 5 damage!
     """
     # If the foe has a special ability and is below half health
-    if 'Special Ability' in foe and foe['Current HP'] < foe['Max HP'] / 2 and foe['Special Ability Counter'] == 0:
+    if 'Special Ability' in foe and foe['Current HP'] <= foe['Max HP'] / 2 and foe['Special Ability Counter'] == 0:
 
         foe_special_ability_name = next(iter(foe['Special Ability'].keys()))
         foe_special_ability = foe['Special Ability'][foe_special_ability_name]
